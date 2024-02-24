@@ -1,0 +1,99 @@
+<!-- order-confirmation.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Order Confirmation</title>
+		<style>
+			body {
+				font-family: "Arial", sans-serif;
+				background-color: #f2f2f2;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+			}
+
+			.container {
+				width: 80%;
+				background-color: #fff;
+				padding: 30px;
+				border-radius: 10px;
+				box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+			}
+
+			h1 {
+				text-align: center;
+				color: #333;
+			}
+
+			p {
+				margin-bottom: 20px;
+				color: #666;
+			}
+
+			.order-details {
+				border-top: 1px solid #ccc;
+				padding-top: 20px;
+				margin-top: 20px;
+			}
+
+			.thank-you {
+				text-align: center;
+				margin-top: 30px;
+				color: #4caf50;
+				font-weight: bold;
+				font-size: 1.2em;
+			}
+
+			.contact-info {
+				margin-top: 30px;
+				text-align: center;
+			}
+
+			.contact-info p {
+				color: #777;
+				margin-bottom: 5px;
+			}
+
+			.contact-info p a {
+				color: #3498db;
+				text-decoration: none;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>Order Confirmation</h1>
+			<p>Thank you for your order! Your purchase has been confirmed.</p>
+			<div class="order-details">
+				<p>Order #: <%= order._id%></p>
+				<p>Order Date: <%= order.date%></p>
+				<p>Order Name: <%= order.name%></p>
+				<p>1</p>
+				<p>Order Name: <%= order.price%></p>
+
+				<p>Subtotal: <%= order.price%></p>
+				<p>Total: <%= order.price%></p>
+			</div>
+			<div class="thank-you">Thank you for shopping with us!</div>
+			<div class="contact-info">
+				<p>
+					If you have any questions or concerns, feel free to
+					<a href="mailto:support@yourcompany.com">contact us</a>.
+				</p>
+				<p>
+					Follow us on
+					<a href="https://twitter.com/yourcompany">@YourCompany</a> for updates
+					and promotions.
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
