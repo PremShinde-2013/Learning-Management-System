@@ -1,6 +1,6 @@
 import express from "express";
 import { authorizeRoles, isAuthenticated } from "../middelware/auth";
-import { createOrder } from "../controllers/order.controller";
+
 import {
 	getCoursesAnalytics,
 	getOrdersAnalytics,
