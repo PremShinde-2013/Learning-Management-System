@@ -29,6 +29,8 @@ import {
 } from "@nextui-org/react";
 import { MailIcon } from "./icons";
 import { LockIcon } from "./icons";
+import { Formik, useFormik } from "formik";
+import * as Yup from "yup";
 
 import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
@@ -47,16 +49,45 @@ import {
 import { Logo } from "@/components/icons";
 import { ModalFooter } from "@nextui-org/react";
 import { useState } from "react";
+import { log } from "console";
 
 export const Navbar = () => {
 	const pathname = usePathname();
 
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const {
+		isOpen: isSignupOpen,
+		onOpen: openSignup,
+		onClose: closeSignup,
+	} = useDisclosure();
+
+	const {
+		isOpen: isSigninOpen,
+		onOpen: openSignin,
+		onClose: closeSignin,
+	} = useDisclosure();
+
 	const [visible, setVisible] = useState(false);
 	const [password, setPassword] = useState("");
 	const toggleVisibility = () => {
 		setVisible(!visible);
 	};
+
+	const openSigninModal = () => {
+		openSignin();
+		closeSignup();
+	};
+
+	const openSignupModal = () => {
+		openSignup();
+		closeSignin();
+	};
+	const validationSchema = Yup.object().shape({
+		name: Yup.string().required("Name is required"),
+		email: Yup.string().email("Invalid email").required("Email is required"),
+		password: Yup.string()
+			.min(8, "Password must be at least 8 characters")
+			.required("Password is required"),
+	});
 
 	const searchInput = (
 		<Input
@@ -78,6 +109,50 @@ export const Navbar = () => {
 			type='search'
 		/>
 	);
+
+	const handleSignupSubmit = (values: any) => {
+		console.log(values);
+		// Perform signup logic here
+		closeSignup();
+	};
+
+	const handleSigninSubmit = (values: any) => {
+		console.log(values);
+		// Perform signin logic here
+		closeSignin();
+	};
+	const signupFormik = useFormik({
+		initialValues: {
+			name: "",
+			email: "",
+			password: "",
+		},
+		validationSchema: validationSchema,
+		onSubmit: async (values) => {
+			// Perform signup logic here, for example:
+			console.log("Signup form values:", values);
+			// Reset the form after successful submission
+			signupFormik.resetForm();
+			// Close the signup modal
+			closeSignup();
+		},
+	});
+
+	const signinFormik = useFormik({
+		initialValues: {
+			email: "",
+			password: "",
+		},
+		validationSchema: validationSchema.pick(["email", "password"]),
+		onSubmit: async (values) => {
+			// Perform signin logic here, for example:
+			console.log("Signin form values:", values);
+			// Reset the form after successful submission
+			signinFormik.resetForm();
+			// Close the signin modal
+			closeSignin();
+		},
+	});
 
 	return (
 		<NextUINavbar maxWidth='xl' position='sticky'>
@@ -133,7 +208,11 @@ export const Navbar = () => {
 					</Button>
 				</NavbarItem>
 				<NavbarItem className='hidden md:flex'>
-					<Button onPress={onOpen} color='default' className='bg-transparent'>
+					<Button
+						onPress={openSignup}
+						color='default'
+						className='bg-transparent'
+					>
 						<Avatar
 							className='hidden lg:flex'
 							isBordered
@@ -178,11 +257,11 @@ export const Navbar = () => {
 					))}
 				</div>
 			</NavbarMenu>
-			<Modal isOpen={isOpen} onOpenChange={onOpenChange} placement='top-center'>
+			<Modal isOpen={isSignupOpen} onClose={closeSignup} placement='top-center'>
 				<ModalContent>
 					{(onClose) => (
 						<>
-							<ModalHeader className='flex flex-col gap-1'>Log in</ModalHeader>
+							<ModalHeader className='flex flex-col gap-1'>Sign up</ModalHeader>
 							<ModalBody>
 								<Input
 									autoFocus
@@ -232,12 +311,9 @@ export const Navbar = () => {
 									>
 										Show Password
 									</Checkbox>
-									<Link color='primary' href='#' size='sm'>
-										Forgot password?
-									</Link>
 								</div>
-								<Button color='primary' variant='shadow' onPress={onClose}>
-									Sign in
+								<Button color='primary' variant='shadow' onPress={closeSignup}>
+									Sign up
 								</Button>
 								<div className='flex py-2 px-1 justify-center gap-4'>
 									<h1> or join us with</h1>
@@ -249,7 +325,9 @@ export const Navbar = () => {
 								</div>
 								<div className='flex py-2 px-1 justify-center gap-4'>
 									<h1>Already have an account?</h1>
-									<Link onClick={onOpen}>Sign in</Link>
+									<Link onPress={openSigninModal} className='cursor-pointer'>
+										Sign in
+									</Link>
 								</div>
 							</ModalBody>
 
@@ -262,21 +340,24 @@ export const Navbar = () => {
 					)}
 				</ModalContent>
 			</Modal>
-			<Modal isOpen={isOpen} onOpenChange={onOpenChange} placement='top-center'>
+			{/* sign in  */}
+
+			<Modal
+				isOpen={isSigninOpen}
+				onClose={() => {
+					closeSignin();
+					// Close the signup modal if it's open
+					if (isSignupOpen) {
+						closeSignup();
+					}
+				}}
+				placement='top-center'
+			>
 				<ModalContent>
 					{(onClose) => (
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Sign in</ModalHeader>
 							<ModalBody>
-								<Input
-									autoFocus
-									endContent={
-										<FaceIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-									}
-									label='Name'
-									placeholder='Enter your name'
-									variant='bordered'
-								/>
 								<Input
 									autoFocus
 									endContent={
@@ -320,7 +401,7 @@ export const Navbar = () => {
 										Forgot password?
 									</Link>
 								</div>
-								<Button color='primary' variant='shadow' onPress={onClose}>
+								<Button color='primary' variant='shadow' onPress={closeSignin}>
 									Sign in
 								</Button>
 								<div className='flex py-2 px-1 justify-center gap-4'>
@@ -332,8 +413,10 @@ export const Navbar = () => {
 									<GitHubIcon />
 								</div>
 								<div className='flex py-2 px-1 justify-center gap-4'>
-									<h1>Already have an account?</h1>
-									<Link href='/'>Sign in</Link>
+									<h1>Not have an Account?</h1>
+									<Link onPress={openSignupModal} className='cursor-pointer'>
+										Sign up
+									</Link>
 								</div>
 							</ModalBody>
 
