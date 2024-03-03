@@ -13,24 +13,6 @@ import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
 import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
-import { link as linkStyles } from "@nextui-org/theme";
-import FaceIcon from "@mui/icons-material/Face";
-import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
-import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
-import {
-	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	useDisclosure,
-	Checkbox,
-} from "@nextui-org/react";
-import { MailIcon } from "./icons";
-import { LockIcon } from "./icons";
-import { Formik, useFormik } from "formik";
-import * as Yup from "yup";
 
 import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
@@ -47,47 +29,15 @@ import {
 } from "@/components/icons";
 
 import { Logo } from "@/components/icons";
-import { ModalFooter } from "@nextui-org/react";
-import { useState } from "react";
-import { log } from "console";
+import { FC, useState } from "react";
+import SignupModal from "./Auth/signin";
+import Authentication from "./Auth/authentication";
 
-export const Navbar = () => {
+type Props = {};
+
+const Navbar: FC<Props> = () => {
 	const pathname = usePathname();
-
-	const {
-		isOpen: isSignupOpen,
-		onOpen: openSignup,
-		onClose: closeSignup,
-	} = useDisclosure();
-
-	const {
-		isOpen: isSigninOpen,
-		onOpen: openSignin,
-		onClose: closeSignin,
-	} = useDisclosure();
-
-	const [visible, setVisible] = useState(false);
-	const [password, setPassword] = useState("");
-	const toggleVisibility = () => {
-		setVisible(!visible);
-	};
-
-	const openSigninModal = () => {
-		openSignin();
-		closeSignup();
-	};
-
-	const openSignupModal = () => {
-		openSignup();
-		closeSignin();
-	};
-	const validationSchema = Yup.object().shape({
-		name: Yup.string().required("Name is required"),
-		email: Yup.string().email("Invalid email").required("Email is required"),
-		password: Yup.string()
-			.min(8, "Password must be at least 8 characters")
-			.required("Password is required"),
-	});
+	const [showAuthentication, setShowAuthentication] = useState(false);
 
 	const searchInput = (
 		<Input
@@ -109,61 +59,25 @@ export const Navbar = () => {
 			type='search'
 		/>
 	);
-
-	const handleSignupSubmit = (values: any) => {
-		console.log(values);
-		// Perform signup logic here
-		closeSignup();
+	const handleAvatarClick = () => {
+		setShowAuthentication(true);
 	};
-
-	const handleSigninSubmit = (values: any) => {
-		console.log(values);
-		// Perform signin logic here
-		closeSignin();
-	};
-	const signupFormik = useFormik({
-		initialValues: {
-			name: "",
-			email: "",
-			password: "",
-		},
-		validationSchema: validationSchema,
-		onSubmit: async (values) => {
-			// Perform signup logic here, for example:
-			console.log("Signup form values:", values);
-			// Reset the form after successful submission
-			signupFormik.resetForm();
-			// Close the signup modal
-			closeSignup();
-		},
-	});
-
-	const signinFormik = useFormik({
-		initialValues: {
-			email: "",
-			password: "",
-		},
-		validationSchema: validationSchema.pick(["email", "password"]),
-		onSubmit: async (values) => {
-			// Perform signin logic here, for example:
-			console.log("Signin form values:", values);
-			// Reset the form after successful submission
-			signinFormik.resetForm();
-			// Close the signin modal
-			closeSignin();
-		},
-	});
 
 	return (
-		<NextUINavbar maxWidth='xl' position='sticky'>
-			<NavbarContent className='basis-1/5 sm:basis-full' justify='start'>
+		<>
+			<NextUINavbar maxWidth='xl' position='sticky'>
+				{/* Navbar content here */}
 				<NavbarBrand as='li' className='gap-3 max-w-fit'>
 					<NextLink className='flex justify-start items-center gap-1' href='/'>
 						<Logo />
 						<p className='font-bold text-inherit'>LearnifyPro</p>
 					</NextLink>
 				</NavbarBrand>
-				<ul className='hidden lg:flex gap-4 justify-start ml-2'>
+				<NavbarContent
+					className='hidden lg:flex gap-4 justify-start ml-2'
+					justify='start'
+				>
+					{/* Navbar items */}
 					{siteConfig.navItems.map((item) => (
 						<NavbarItem key={item.href}>
 							<Link
@@ -175,260 +89,104 @@ export const Navbar = () => {
 							</Link>
 						</NavbarItem>
 					))}
-				</ul>
-			</NavbarContent>
+				</NavbarContent>
 
-			<NavbarContent
-				className='hidden sm:flex basis-1/5 sm:basis-full'
-				justify='end'
-			>
-				<NavbarItem className='hidden sm:flex gap-2'>
-					<Link isExternal href={siteConfig.links.twitter} aria-label='Twitter'>
-						<TwitterIcon className='text-default-500' />
-					</Link>
-					<Link isExternal href={siteConfig.links.discord} aria-label='Discord'>
-						<DiscordIcon className='text-default-500' />
-					</Link>
-					<Link isExternal href={siteConfig.links.github} aria-label='Github'>
-						<GithubIcon className='text-default-500' />
-					</Link>
-					<ThemeSwitch />
-				</NavbarItem>
-				<NavbarItem className='hidden lg:flex'>{searchInput}</NavbarItem>
-				<NavbarItem className='hidden md:flex'>
-					<Button
-						isExternal
-						as={Link}
-						className='text-sm font-normal text-default-600 bg-default-100'
-						href={siteConfig.links.sponsor}
-						startContent={<HeartFilledIcon className='text-danger' />}
-						variant='flat'
-					>
-						Sponsor
-					</Button>
-				</NavbarItem>
-				<NavbarItem className='hidden md:flex'>
-					<Button
-						onPress={openSignup}
-						color='default'
-						className='bg-transparent'
-					>
+				{/* Navbar content */}
+				<NavbarContent
+					className='hidden sm:flex basis-1/5 sm:basis-full'
+					justify='end'
+				>
+					{/* Other items */}
+					<NavbarItem className='hidden sm:flex gap-2'>
+						<Link
+							isExternal
+							href={siteConfig.links.twitter}
+							aria-label='Twitter'
+						>
+							<TwitterIcon className='text-default-500' />
+						</Link>
+						<Link
+							isExternal
+							href={siteConfig.links.discord}
+							aria-label='Discord'
+						>
+							<DiscordIcon className='text-default-500' />
+						</Link>
+						<Link isExternal href={siteConfig.links.github} aria-label='Github'>
+							<GithubIcon className='text-default-500' />
+						</Link>
+						<ThemeSwitch />
+					</NavbarItem>
+					<NavbarItem className='hidden lg:flex'>{searchInput}</NavbarItem>
+					<NavbarItem className='hidden md:flex'>
+						<Button
+							isExternal
+							as={Link}
+							className='text-sm font-normal text-default-600 bg-default-100'
+							href={siteConfig.links.sponsor}
+							startContent={<HeartFilledIcon className='text-danger' />}
+							variant='flat'
+						>
+							Sponsor
+						</Button>
+					</NavbarItem>
+					<NavbarItem className='hidden md:flex'>
+						{/* Avatar with click event to toggle sign-in modal */}
 						<Avatar
-							className='hidden lg:flex'
+							className='hidden lg:flex cursor-pointer'
 							isBordered
 							radius='full'
 							src='https://i.pravatar.cc/150?u=a04258114e29026708c'
-						/>{" "}
-					</Button>
-				</NavbarItem>
-			</NavbarContent>
+							onClick={handleAvatarClick}
+						/>
+					</NavbarItem>
+				</NavbarContent>
 
-			<NavbarContent className='sm:hidden basis-1 pl-4' justify='end'>
-				<Link isExternal href={siteConfig.links.github} aria-label='Github'>
-					<GithubIcon className='text-default-500' />
-				</Link>
-				<ThemeSwitch />
-				<NavbarMenuToggle />
-			</NavbarContent>
+				{/* Navbar menu */}
+				<NavbarContent className='sm:hidden basis-1 pl-4' justify='end'>
+					{/* <Link isExternal href={siteConfig.links.github} aria-label='Github'>
+						<GithubIcon className='text-default-500' />
+					</Link> */}
+					<Avatar
+						className='  cursor-pointer'
+						isBordered
+						radius='full'
+						src='https://i.pravatar.cc/150?u=a04258114e29026708c'
+						onClick={handleAvatarClick}
+					/>
+					<ThemeSwitch />
+					<NavbarMenuToggle />
+				</NavbarContent>
 
-			<NavbarMenu>
-				{searchInput}
-				<div className='mx-4 mt-2 flex flex-col gap-2'>
-					{siteConfig.navMenuItems.map((item, index) => (
-						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link
-								className={`link ${pathname === item.href ? "active" : ""}`}
-								color={
-									// index === 0
-									// 	? "success"
-									// 	:
-									index === siteConfig.navMenuItems.length - 1
-										? "danger"
-										: pathname === item.href
-										? "success" // Set color to green when active
-										: "foreground"
-								}
-								href={item.href}
-								size='lg'
-							>
-								{item.label}
-							</Link>
-						</NavbarMenuItem>
-					))}
-				</div>
-			</NavbarMenu>
-			<Modal isOpen={isSignupOpen} onClose={closeSignup} placement='top-center'>
-				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className='flex flex-col gap-1'>Sign up</ModalHeader>
-							<ModalBody>
-								<Input
-									autoFocus
-									endContent={
-										<FaceIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
+				<NavbarMenu>
+					{searchInput}
+					<div className='mx-4 mt-2 flex flex-col gap-2'>
+						{siteConfig.navMenuItems.map((item, index) => (
+							<NavbarMenuItem key={`${item}-${index}`}>
+								<Link
+									className={`link ${pathname === item.href ? "active" : ""}`}
+									color={
+										index === siteConfig.navMenuItems.length - 1
+											? "danger"
+											: pathname === item.href
+											? "success"
+											: "foreground"
 									}
-									label='Name'
-									placeholder='Enter your name'
-									variant='bordered'
-								/>
-								<Input
-									autoFocus
-									endContent={
-										<MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-									}
-									label='Email'
-									placeholder='Enter your email'
-									variant='bordered'
-								/>
-								<Input
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									endContent={
-										visible ? (
-											<VisibilityRoundedIcon
-												className='text-2xl text-default-400 pointer-events-none flex-shrink-0'
-												onClick={toggleVisibility}
-											/>
-										) : (
-											<VisibilityOffRoundedIcon
-												className='text-2xl text-default-400 pointer-events-none flex-shrink-0'
-												onClick={toggleVisibility}
-											/>
-										)
-									}
-									label='Password'
-									placeholder='Enter your password'
-									type={visible ? "text" : "password"}
-									variant='bordered'
-								/>
-								<div className='flex py-2 px-1 justify-between'>
-									<Checkbox
-										classNames={{
-											label: "text-small",
-										}}
-										onClick={toggleVisibility}
-									>
-										Show Password
-									</Checkbox>
-								</div>
-								<Button color='primary' variant='shadow' onPress={closeSignup}>
-									Sign up
-								</Button>
-								<div className='flex py-2 px-1 justify-center gap-4'>
-									<h1> or join us with</h1>
-								</div>
-
-								<div className='flex py-2 px-1 justify-center gap-4'>
-									<GoogleIcon />
-									<GitHubIcon />
-								</div>
-								<div className='flex py-2 px-1 justify-center gap-4'>
-									<h1>Already have an account?</h1>
-									<Link onPress={openSigninModal} className='cursor-pointer'>
-										Sign in
-									</Link>
-								</div>
-							</ModalBody>
-
-							<ModalFooter>
-								<Button color='danger' variant='flat' onPress={onClose}>
-									Close
-								</Button>
-							</ModalFooter>
-						</>
-					)}
-				</ModalContent>
-			</Modal>
-			{/* sign in  */}
-
-			<Modal
-				isOpen={isSigninOpen}
-				onClose={() => {
-					closeSignin();
-					// Close the signup modal if it's open
-					if (isSignupOpen) {
-						closeSignup();
-					}
-				}}
-				placement='top-center'
-			>
-				<ModalContent>
-					{(onClose) => (
-						<>
-							<ModalHeader className='flex flex-col gap-1'>Sign in</ModalHeader>
-							<ModalBody>
-								<Input
-									autoFocus
-									endContent={
-										<MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-									}
-									label='Email'
-									placeholder='Enter your email'
-									variant='bordered'
-								/>
-								<Input
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									endContent={
-										visible ? (
-											<VisibilityRoundedIcon
-												className='text-2xl text-default-400 pointer-events-none flex-shrink-0'
-												onClick={toggleVisibility}
-											/>
-										) : (
-											<VisibilityOffRoundedIcon
-												className='text-2xl text-default-400 pointer-events-none flex-shrink-0'
-												onClick={toggleVisibility}
-											/>
-										)
-									}
-									label='Password'
-									placeholder='Enter your password'
-									type={visible ? "text" : "password"}
-									variant='bordered'
-								/>
-								<div className='flex py-2 px-1 justify-between'>
-									<Checkbox
-										classNames={{
-											label: "text-small",
-										}}
-										onClick={toggleVisibility}
-									>
-										Show Password
-									</Checkbox>
-									<Link color='primary' href='#' size='sm'>
-										Forgot password?
-									</Link>
-								</div>
-								<Button color='primary' variant='shadow' onPress={closeSignin}>
-									Sign in
-								</Button>
-								<div className='flex py-2 px-1 justify-center gap-4'>
-									<h1> or join us with</h1>
-								</div>
-
-								<div className='flex py-2 px-1 justify-center gap-4'>
-									<GoogleIcon />
-									<GitHubIcon />
-								</div>
-								<div className='flex py-2 px-1 justify-center gap-4'>
-									<h1>Not have an Account?</h1>
-									<Link onPress={openSignupModal} className='cursor-pointer'>
-										Sign up
-									</Link>
-								</div>
-							</ModalBody>
-
-							<ModalFooter>
-								<Button color='danger' variant='flat' onPress={onClose}>
-									Close
-								</Button>
-							</ModalFooter>
-						</>
-					)}
-				</ModalContent>
-			</Modal>
-		</NextUINavbar>
+									href={item.href}
+									size='lg'
+								>
+									{item.label}
+								</Link>
+							</NavbarMenuItem>
+						))}
+					</div>
+				</NavbarMenu>
+			</NextUINavbar>
+			{showAuthentication && (
+				<Authentication onClose={() => setShowAuthentication(false)} />
+			)}
+		</>
 	);
 };
+
+export default Navbar;

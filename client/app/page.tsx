@@ -1,3 +1,4 @@
+"use client";
 import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
@@ -7,9 +8,11 @@ import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 import { SparklesPreview } from "./components/sparkles";
 import { Image } from "@nextui-org/react";
-import { Container } from "postcss";
+import React, { FC, useState } from "react";
 
-export default function Home() {
+interface Props {}
+// export default function Home() {
+const Home: FC<Props> = (props) => {
 	return (
 		<>
 			<div
@@ -73,4 +76,6 @@ export default function Home() {
 			<SparklesPreview />
 		</>
 	);
-}
+};
+
+export default Home;

@@ -1,0 +1,182 @@
+import React, { useEffect, useRef } from "react";
+import {
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	Button,
+	Input,
+	Link,
+} from "@nextui-org/react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import Image from "next/image";
+
+interface Props {
+	onClose: () => void;
+	toggleSignInModal: () => void; // Add toggleSignInModal prop
+}
+
+const VerificationModal: React.FC<Props> = ({
+	onClose,
+	toggleSignInModal,
+}: Props) => {
+	const inputRef1 = useRef<HTMLInputElement>(null);
+	const inputRef2 = useRef<HTMLInputElement>(null);
+	const inputRef3 = useRef<HTMLInputElement>(null);
+	const inputRef4 = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (inputRef1.current) {
+			inputRef1.current.focus();
+		}
+	}, []);
+
+	const validationSchema = Yup.object().shape({
+		digit1: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
+		digit2: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
+		digit3: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
+		digit4: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
+	});
+
+	const handleVerificationSubmit = (values: any, { setSubmitting }: any) => {
+		console.log("Form submitted:", values);
+		setSubmitting(false);
+		onClose();
+	};
+
+	return (
+		<Modal isOpen={true} onClose={onClose} placement='top-center'>
+			<ModalContent>
+				<ModalHeader className='flex justify-center'>
+					Verify your account
+				</ModalHeader>
+				<ModalBody>
+					<div className='flex justify-center '>
+						<Image
+							width={120}
+							height={120}
+							alt='Verified Image'
+							src='https://cdn-icons-png.freepik.com/256/10629/10629607.png?ga=GA1.1.1637687762.1708967549&'
+						/>
+					</div>
+					<Formik
+						initialValues={{
+							digit1: "",
+							digit2: "",
+							digit3: "",
+							digit4: "",
+						}}
+						validationSchema={validationSchema}
+						onSubmit={handleVerificationSubmit}
+					>
+						{({ isSubmitting }) => (
+							<Form>
+								<div className='flex flex-row justify-center gap-2'>
+									<Field name='digit1'>
+										{({ field, meta }: any) => (
+											<Input
+												{...field}
+												ref={inputRef1}
+												label=''
+												className='border-2 border-purple-200 text-center rounded-2xl'
+												error={meta.touched && meta.error}
+												placeholder='1'
+												maxLength={1}
+												onInput={(e: React.FormEvent<HTMLInputElement>) => {
+													if (
+														e.currentTarget.value.length === 1 &&
+														inputRef2.current
+													) {
+														inputRef2.current.focus();
+													}
+												}}
+											/>
+										)}
+									</Field>
+									<Field name='digit2'>
+										{({ field, meta }: any) => (
+											<Input
+												{...field}
+												ref={inputRef2}
+												label=''
+												className='border-2 border-purple-200 text-center rounded-2xl'
+												error={meta.touched && meta.error}
+												placeholder='2'
+												maxLength={1}
+												onInput={(e: React.FormEvent<HTMLInputElement>) => {
+													if (
+														e.currentTarget.value.length === 1 &&
+														inputRef3.current
+													) {
+														inputRef3.current.focus();
+													}
+												}}
+											/>
+										)}
+									</Field>
+									<Field name='digit3'>
+										{({ field, meta }: any) => (
+											<Input
+												{...field}
+												ref={inputRef3}
+												label=''
+												className='border-2 border-purple-200 text-center rounded-2xl'
+												error={meta.touched && meta.error}
+												placeholder='3'
+												maxLength={1}
+												onInput={(e: React.FormEvent<HTMLInputElement>) => {
+													if (
+														e.currentTarget.value.length === 1 &&
+														inputRef4.current
+													) {
+														inputRef4.current.focus();
+													}
+												}}
+											/>
+										)}
+									</Field>
+									<Field name='digit4'>
+										{({ field, meta }: any) => (
+											<Input
+												{...field}
+												ref={inputRef4}
+												label=''
+												className='border-2 border-purple-200 text-center rounded-2xl'
+												error={meta.touched && meta.error}
+												placeholder='4'
+												maxLength={1}
+											/>
+										)}
+									</Field>
+								</div>
+								<div className='flex justify-center  mt-5'>
+									<Button
+										className='w-96 '
+										color='primary'
+										variant='flat'
+										type='submit'
+										disabled={isSubmitting}
+									>
+										Verify
+									</Button>
+								</div>
+								<ModalFooter></ModalFooter>
+								<div className='flex justify-center  gap-4 my-5'>
+									<h1>Go back to Sign-in ? </h1>
+									<Link className='cursor-pointer' onClick={toggleSignInModal}>
+										{" "}
+										Sign-in
+									</Link>{" "}
+								</div>
+							</Form>
+						)}
+					</Formik>
+				</ModalBody>
+			</ModalContent>
+		</Modal>
+	);
+};
+
+export default VerificationModal;
