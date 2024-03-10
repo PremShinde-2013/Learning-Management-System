@@ -1,182 +1,218 @@
-import React, { useEffect, useRef } from "react";
+import React, { FC, useState } from "react";
 import {
-	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
-	Button,
-	Input,
+	Card,
+	CardHeader,
+	CardBody,
+	CardFooter,
+	Divider,
 	Link,
+	Image,
+	Input,
+	Textarea,
 } from "@nextui-org/react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import Image from "next/image";
 
-interface Props {
-	onClose: () => void;
-	toggleSignInModal: () => void; // Add toggleSignInModal prop
-}
+type Props = {
+	courseInfo: any;
+	setCourseInfo: (courseInfo: any) => void;
+	active: number;
+	setActive: (active: number) => void;
+};
 
-const VerificationModal: React.FC<Props> = ({
-	onClose,
-	toggleSignInModal,
-}: Props) => {
-	const inputRef1 = useRef<HTMLInputElement>(null);
-	const inputRef2 = useRef<HTMLInputElement>(null);
-	const inputRef3 = useRef<HTMLInputElement>(null);
-	const inputRef4 = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		if (inputRef1.current) {
-			inputRef1.current.focus();
+const CourseInformation: FC<Props> = ({
+	courseInfo,
+	setCourseInfo,
+	active,
+	setActive,
+}) => {
+	const [dragging, setDragging] = useState(false);
+	const handleSubmit = (e: any) => {
+		e.preventDefault();
+		setActive(active + 1);
+	};
+	const handleFileChange = (e: any) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = (e: any) => {
+				if (reader.readyState === 2) {
+					setCourseInfo({ ...courseInfo, thumbnail: reader.result });
+				}
+			};
+			reader.readAsDataURL(file);
 		}
-	}, []);
-
-	const validationSchema = Yup.object().shape({
-		digit1: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
-		digit2: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
-		digit3: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
-		digit4: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
-	});
-
-	const handleVerificationSubmit = (values: any, { setSubmitting }: any) => {
-		console.log("Form submitted:", values);
-		setSubmitting(false);
-		onClose();
 	};
 
+	const handleDragOver = (e: any) => {
+		e.preventDefault();
+		setDragging(true);
+	};
+	const handleDragLeave = (e: any) => {
+		e.preventDefault();
+		setDragging(false);
+	};
+	const handleDrop = (e: any) => {
+		e.preventDefault();
+		setDragging(false);
+		const file = e.dataTransfer.files?.[0];
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onload = () => {
+				setCourseInfo({ ...courseInfo, thumbnail: reader.result });
+			};
+			reader.readAsDataURL(file);
+		}
+	};
 	return (
-		<Modal isOpen={true} onClose={onClose} placement='top-center'>
-			<ModalContent>
-				<ModalHeader className='flex justify-center'>
-					Verify your account
-				</ModalHeader>
-				<ModalBody>
-					<div className='flex justify-center '>
-						<Image
-							width={120}
-							height={120}
-							alt='Verified Image'
-							src='https://cdn-icons-png.freepik.com/256/10629/10629607.png?ga=GA1.1.1637687762.1708967549&'
+		<div>
+			<Card className='md:min-w-[1000px] '>
+				<CardHeader className='flex gap-3'>
+					<Input
+						labelPlacement='outside'
+						type='text'
+						variant='bordered'
+						label='Course Name'
+						placeholder='Mern Stack LMS with Nextjs'
+						value={courseInfo.name}
+						onChange={(e: any) =>
+							setCourseInfo({ ...courseInfo, name: e.target.value })
+						}
+					/>
+				</CardHeader>
+				<CardBody className='gap-3'>
+					<Textarea
+						variant='bordered'
+						label='Course Description'
+						labelPlacement='outside'
+						placeholder='Write something amazing...'
+						className='col-span-12 md:col-span-6 mb-6 md:mb-0'
+						value={courseInfo.description}
+						onChange={(e: any) =>
+							setCourseInfo({
+								...courseInfo,
+								description: e.target.value,
+							})
+						}
+					/>
+					<div className='flex gap-3'>
+						<Input
+							labelPlacement='outside'
+							type='number'
+							variant='bordered'
+							label='Course Price'
+							placeholder='499'
+							value={courseInfo.price}
+							onChange={(e: any) =>
+								setCourseInfo({ ...courseInfo, price: e.target.value })
+							}
+							startContent={
+								<div className='pointer-events-none flex items-center'>
+									<span className='text-default-400 text-small'>₹</span>
+								</div>
+							}
+						/>
+						<Input
+							labelPlacement='outside'
+							type='number'
+							variant='bordered'
+							label='Estimated Name (optional)'
+							placeholder='599'
+							value={courseInfo.estimatedPrice}
+							onChange={(e: any) =>
+								setCourseInfo({ ...courseInfo, estimatedPrice: e.target.value })
+							}
+							startContent={
+								<div className='pointer-events-none flex items-center'>
+									<span className='text-default-400 text-small'>₹</span>
+								</div>
+							}
 						/>
 					</div>
-					<Formik
-						initialValues={{
-							digit1: "",
-							digit2: "",
-							digit3: "",
-							digit4: "",
-						}}
-						validationSchema={validationSchema}
-						onSubmit={handleVerificationSubmit}
+					<Input
+						labelPlacement='outside'
+						type='text'
+						variant='bordered'
+						label='Course Tags'
+						value={courseInfo.tags}
+						onChange={(e: any) =>
+							setCourseInfo({ ...courseInfo, tags: e.target.value })
+						}
+						placeholder='MERN,NEXT 13,Socket io,tailwind css '
+					/>
+
+					<div className='flex gap-3'>
+						<Input
+							labelPlacement='outside'
+							type='text'
+							variant='bordered'
+							label='Course Level'
+							value={courseInfo.level}
+							onChange={(e: any) =>
+								setCourseInfo({ ...courseInfo, level: e.target.value })
+							}
+							placeholder='Beginner/Intermediate/Expert'
+						/>
+						<Input
+							labelPlacement='outside'
+							type='url'
+							variant='bordered'
+							label='Demo url'
+							placeholder='ud8ce7c'
+							value={courseInfo.demoUrl}
+							onChange={(e: any) =>
+								setCourseInfo({ ...courseInfo, demoUrl: e.target.value })
+							}
+							startContent={
+								<div className='pointer-events-none flex items-center'>
+									<span className='text-default-400 text-small'>https://</span>
+								</div>
+							}
+							endContent={
+								<div className='pointer-events-none flex items-center'>
+									<span className='text-default-400 text-small'>.org/</span>
+								</div>
+							}
+						/>
+					</div>
+					<Input
+						// className='hidden'
+						labelPlacement='outside'
+						type='file'
+						variant='bordered'
+						label='Course Thumbnail'
+						accept='images/*'
+						onChange={handleFileChange}
+					/>
+					<label
+						htmlFor='file'
+						onDragOver={handleDragOver}
+						onDragLeave={handleDragLeave}
+						onDrop={handleDrop}
 					>
-						{({ isSubmitting }) => (
-							<Form>
-								<div className='flex flex-row justify-center gap-2'>
-									<Field name='digit1'>
-										{({ field, meta }: any) => (
-											<Input
-												{...field}
-												ref={inputRef1}
-												label=''
-												className='border-2 border-purple-200 text-center rounded-2xl'
-												error={meta.touched && meta.error}
-												placeholder='1'
-												maxLength={1}
-												onInput={(e: React.FormEvent<HTMLInputElement>) => {
-													if (
-														e.currentTarget.value.length === 1 &&
-														inputRef2.current
-													) {
-														inputRef2.current.focus();
-													}
-												}}
-											/>
-										)}
-									</Field>
-									<Field name='digit2'>
-										{({ field, meta }: any) => (
-											<Input
-												{...field}
-												ref={inputRef2}
-												label=''
-												className='border-2 border-purple-200 text-center rounded-2xl'
-												error={meta.touched && meta.error}
-												placeholder='2'
-												maxLength={1}
-												onInput={(e: React.FormEvent<HTMLInputElement>) => {
-													if (
-														e.currentTarget.value.length === 1 &&
-														inputRef3.current
-													) {
-														inputRef3.current.focus();
-													}
-												}}
-											/>
-										)}
-									</Field>
-									<Field name='digit3'>
-										{({ field, meta }: any) => (
-											<Input
-												{...field}
-												ref={inputRef3}
-												label=''
-												className='border-2 border-purple-200 text-center rounded-2xl'
-												error={meta.touched && meta.error}
-												placeholder='3'
-												maxLength={1}
-												onInput={(e: React.FormEvent<HTMLInputElement>) => {
-													if (
-														e.currentTarget.value.length === 1 &&
-														inputRef4.current
-													) {
-														inputRef4.current.focus();
-													}
-												}}
-											/>
-										)}
-									</Field>
-									<Field name='digit4'>
-										{({ field, meta }: any) => (
-											<Input
-												{...field}
-												ref={inputRef4}
-												label=''
-												className='border-2 border-purple-200 text-center rounded-2xl'
-												error={meta.touched && meta.error}
-												placeholder='4'
-												maxLength={1}
-											/>
-										)}
-									</Field>
-								</div>
-								<div className='flex justify-center  mt-5'>
-									<Button
-										className='w-96 '
-										color='primary'
-										variant='flat'
-										type='submit'
-										disabled={isSubmitting}
-									>
-										Verify
-									</Button>
-								</div>
-								<ModalFooter></ModalFooter>
-								<div className='flex justify-center  gap-4 my-5'>
-									<h1>Go back to Sign-in ? </h1>
-									<Link className='cursor-pointer' onClick={toggleSignInModal}>
-										{" "}
-										Sign-in
-									</Link>{" "}
-								</div>
-							</Form>
+						{courseInfo.thumbnail ? (
+							<img
+								src={courseInfo.thubnail}
+								alt=''
+								className=' max-h-full w-full object-cover'
+							/>
+						) : (
+							<span>Drag and drop your thumbnail here or click to browse</span>
 						)}
-					</Formik>
-				</ModalBody>
-			</ModalContent>
-		</Modal>
+					</label>
+				</CardBody>
+				<Divider />
+				<CardFooter>
+					<Link
+						isExternal
+						showAnchorIcon
+						href='https://github.com/nextui-org/nextui'
+					>
+						Visit source code on GitHub.
+					</Link>
+				</CardFooter>
+			</Card>
+		</div>
 	);
 };
 
-export default VerificationModal;
+export default CourseInformation;

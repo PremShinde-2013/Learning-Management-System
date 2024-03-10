@@ -29,15 +29,62 @@ import {
 } from "@/components/icons";
 
 import { Logo } from "@/components/icons";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import SignupModal from "./Auth/signin";
 import Authentication from "./Auth/authentication";
+import { useSelector } from "react-redux";
+import { useSession } from "next-auth/react";
+import {
+	useLogOutQuery,
+	useSocialAuthMutation,
+} from "@/redux/features/auth/authApi";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
+import { avatar } from "@nextui-org/theme";
 
 type Props = {};
 
 const Navbar: FC<Props> = () => {
 	const pathname = usePathname();
 	const [showAuthentication, setShowAuthentication] = useState(false);
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
+
+	const { user } = useSelector((state: any) => state.auth);
+	const { data } = useSession();
+	const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+
+	const [logout, setLogout] = useState(false);
+	const {} = useLogOutQuery(undefined, {
+		skip: !logout ? true : false,
+	});
+
+	const handleOpenSnackbar = (message: any) => {
+		setSnackbarMessage(message);
+		setOpenSnackbar(true);
+	};
+
+	useEffect(() => {
+		if (!user) {
+			if (data) {
+				socialAuth({
+					email: data?.user?.email,
+					name: data?.user?.name,
+					avatar: data?.user?.image,
+				});
+				// handleOpenSnackbar("Welcome! You have successfully logged in.");
+			}
+		}
+		if (data === null) {
+			if (isSuccess) {
+				console.log("Logging successful");
+				handleOpenSnackbar("Welcome! You have successfully logged in.");
+			}
+		}
+		if (data === null) {
+			setLogout(true);
+		}
+	}, [data, user]);
 
 	const searchInput = (
 		<Input
@@ -130,30 +177,66 @@ const Navbar: FC<Props> = () => {
 							Sponsor
 						</Button>
 					</NavbarItem>
-					<NavbarItem className='hidden md:flex'>
+					<NavbarItem className=' md:flex'>
 						{/* Avatar with click event to toggle sign-in modal */}
-						<Avatar
-							className='hidden lg:flex cursor-pointer'
-							isBordered
-							radius='full'
-							src='https://i.pravatar.cc/150?u=a04258114e29026708c'
-							onClick={handleAvatarClick}
-						/>
+						{user ? (
+							<>
+								<Link href='/profile'>
+									<Avatar
+										className=' lg:flex cursor-pointer'
+										isBordered
+										// height={40}
+										radius='full'
+										src={
+											user.avatar
+												? user.avatar.url
+												: "https://img.freepik.com/free-photo/view-3d-man-holding-laptop_23-2150709818.jpg?t=st=1709596014~exp=1709599614~hmac=123a2af7e09c6c82b82801146d728478720e61efbadc943eafac84625951ac51&w=740"
+										}
+									/>
+								</Link>
+							</>
+						) : (
+							<Avatar
+								className='hidden lg:flex cursor-pointer'
+								isBordered
+								radius='full'
+								src='https://i.pravatar.cc/150?u=a04258114e29026708c'
+								onClick={handleAvatarClick}
+							/>
+						)}
 					</NavbarItem>
 				</NavbarContent>
 
 				{/* Navbar menu */}
 				<NavbarContent className='sm:hidden basis-1 pl-4' justify='end'>
-					{/* <Link isExternal href={siteConfig.links.github} aria-label='Github'>
-						<GithubIcon className='text-default-500' />
-					</Link> */}
-					<Avatar
-						className='  cursor-pointer'
-						isBordered
-						radius='full'
-						src='https://i.pravatar.cc/150?u=a04258114e29026708c'
-						onClick={handleAvatarClick}
-					/>
+					<NavbarItem>
+						{/* Avatar with click event to toggle sign-in modal */}
+						{user ? (
+							<>
+								<Link href='/profile'>
+									<Avatar
+										className=' lg:flex cursor-pointer'
+										isBordered
+										// height={40}
+										radius='full'
+										src={
+											user.avatar
+												? user.avatar.url
+												: "https://img.freepik.com/free-photo/view-3d-man-holding-laptop_23-2150709818.jpg?t=st=1709596014~exp=1709599614~hmac=123a2af7e09c6c82b82801146d728478720e61efbadc943eafac84625951ac51&w=740"
+										}
+									/>
+								</Link>
+							</>
+						) : (
+							<Avatar
+								className='hidden lg:flex cursor-pointer'
+								isBordered
+								radius='full'
+								src='https://i.pravatar.cc/150?u=a04258114e29026708c'
+								onClick={handleAvatarClick}
+							/>
+						)}
+					</NavbarItem>
 					<ThemeSwitch />
 					<NavbarMenuToggle />
 				</NavbarContent>
@@ -185,6 +268,20 @@ const Navbar: FC<Props> = () => {
 			{showAuthentication && (
 				<Authentication onClose={() => setShowAuthentication(false)} />
 			)}
+			<Snackbar
+				open={openSnackbar}
+				autoHideDuration={6000} // Adjust the duration as needed
+				onClose={() => setOpenSnackbar(false)}
+			>
+				<MuiAlert
+					elevation={6}
+					variant='filled'
+					onClose={() => setOpenSnackbar(false)}
+					severity='success' // Change severity to 'error' or 'warning' as needed
+				>
+					{snackbarMessage}
+				</MuiAlert>
+			</Snackbar>
 		</>
 	);
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Modal,
 	ModalContent,
@@ -18,7 +18,10 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import { MailIcon } from "../icons";
 import VerificationModal from "./verification";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { Snackbar } from "@mui/material";
 
+import { signIn } from "next-auth/react";
 interface Props {
 	onClose: () => void;
 	toggleSignUpModal: () => void;
@@ -31,21 +34,46 @@ const validationSchema = Yup.object().shape({
 
 const SignInModal: React.FC<Props> = ({ onClose, toggleSignUpModal }) => {
 	const [visible, setVisible] = useState(false);
-	// const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
+	const [login, { isSuccess, error }] = useLoginMutation();
 
-	const handleSubmit = (values: any, { setSubmitting }: any) => {
+	const handleSubmit = async (values: any, { setSubmitting }: any) => {
 		console.log("Form submitted:", values);
 		setSubmitting(false);
-		// setShowVerificationModal(true);
+		await login({ email: values.email, password: values.password });
 	};
+
+	useEffect(() => {
+		if (isSuccess) {
+			console.log("Login Successfully!");
+			setSnackbarMessage("Login successful!"); // Set the success message
+			setSnackbarOpen(true); // Open Snackbar to display success message
+
+			setTimeout(() => {
+				setSnackbarOpen(false);
+				onClose();
+			}, 8000);
+		}
+		if (error) {
+			if ("data" in error) {
+				const errorData = error as any;
+				setSnackbarMessage(errorData.data.message);
+				setSnackbarOpen(true);
+			}
+		}
+	}, [isSuccess, error]);
 
 	const toggleVisibility = () => {
 		setVisible(!visible);
 	};
 
 	const closeModals = () => {
-		// setShowVerificationModal(false);
 		onClose();
+	};
+
+	const handleSnackbarClose = () => {
+		setSnackbarOpen(false);
 	};
 
 	return (
@@ -127,9 +155,20 @@ const SignInModal: React.FC<Props> = ({ onClose, toggleSignUpModal }) => {
 							<h1> or join us with</h1>
 						</div>
 						<div className='flex py-2 px-1 justify-center gap-4'>
-							{/* Add icons for Google and GitHub */}
-							<GoogleIcon />
-							<GitHubIcon />
+							<div
+								className='cursor-pointer'
+								onClick={async () => {
+									await signIn();
+								}}
+							>
+								<GoogleIcon />
+							</div>
+							<div
+								className='cursor-pointer'
+								onClick={async () => await signIn("github")}
+							>
+								<GitHubIcon />
+							</div>
 						</div>
 						<div className='flex py-2 px-1 justify-center gap-4'>
 							<h1>Don&apos;t have an account?</h1>
@@ -145,7 +184,13 @@ const SignInModal: React.FC<Props> = ({ onClose, toggleSignUpModal }) => {
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
-			{/* {showVerificationModal && <VerificationModal onClose={closeModals} />} */}
+			<Snackbar
+				className='rounded-xl  '
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleSnackbarClose}
+				message={snackbarMessage}
+			/>
 		</>
 	);
 };

@@ -6,7 +6,7 @@ import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
 import { Link } from "@nextui-org/link";
 import clsx from "clsx";
-
+import { SessionProvider } from "next-auth/react";
 export const metadata: Metadata = {
 	title: {
 		default: siteConfig.name,

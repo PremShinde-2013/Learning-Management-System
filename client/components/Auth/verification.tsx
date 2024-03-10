@@ -14,41 +14,44 @@ import * as Yup from "yup";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useActivationMutation } from "@/redux/features/auth/authApi";
-import Snackbar from "@mui/material/Snackbar";
-import Typography from "@mui/material/Typography"; // Import Typography component
+import Typography from "@mui/material/Typography";
+import { Snackbar } from "@mui/material";
 
 interface Props {
 	onClose: () => void;
-	toggleSignInModal: () => void; // Add toggleSignInModal prop
+	toggleSignInModal: () => void;
 }
 
 const VerificationModal: React.FC<Props> = ({
 	onClose,
 	toggleSignInModal,
 }: Props) => {
-	const inputRef1 = useRef<HTMLInputElement>(null);
-	const inputRef2 = useRef<HTMLInputElement>(null);
-	const inputRef3 = useRef<HTMLInputElement>(null);
-	const inputRef4 = useRef<HTMLInputElement>(null);
+	const inputRefs = [
+		useRef<HTMLInputElement>(null),
+		useRef<HTMLInputElement>(null),
+		useRef<HTMLInputElement>(null),
+		useRef<HTMLInputElement>(null),
+	];
 
 	const { token } = useSelector((state: any) => state.auth);
-	const [snackbarOpen, setSnackbarOpen] = useState(false);
-	const [snackbarMessage, setSnackbarMessage] = useState("");
-	const [snackbarType, setSnackbarType] = useState<"success" | "error">(
-		"success"
-	);
 
 	const [activation, { isSuccess, error }] = useActivationMutation();
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
+	const [activationMessageShown, setActivationMessageShown] = useState(false); // New state
 
 	useEffect(() => {
-		inputRef1?.current?.focus();
+		inputRefs[0]?.current?.focus();
 	}, []);
 
 	useEffect(() => {
 		if (isSuccess) {
-			setSnackbarMessage("Account activated");
-			setSnackbarType("success");
+			setSnackbarMessage("Account activated successfully!");
 			setSnackbarOpen(true);
+			setTimeout(() => {
+				setSnackbarOpen(false);
+				toggleSignInModal();
+			}, 8000);
 		} else if (error) {
 			if ("data" in error) {
 				const errorData = error as any;
@@ -56,10 +59,13 @@ const VerificationModal: React.FC<Props> = ({
 			} else {
 				setSnackbarMessage("An error occurred");
 			}
-			setSnackbarType("error");
 			setSnackbarOpen(true);
 		}
 	}, [isSuccess, error]);
+
+	const handleCloseSnackbar = () => {
+		setSnackbarOpen(false);
+	};
 
 	const validationSchema = Yup.object().shape({
 		digit1: Yup.string().matches(/^\d$/, "Enter a digit").required("Required"),
@@ -74,7 +80,6 @@ const VerificationModal: React.FC<Props> = ({
 	) => {
 		console.log("Form submitted:", values);
 		setSubmitting(false);
-		onClose();
 		const verificationNumber = Object.values(values).join("");
 
 		if (verificationNumber.length !== 4) {
@@ -86,6 +91,7 @@ const VerificationModal: React.FC<Props> = ({
 				activation_token: token,
 				activation_code: verificationNumber,
 			});
+			setActivationMessageShown(true); // Activate the message after successful activation
 		} catch (error) {
 			console.error("Error activating account:", error);
 		}
@@ -93,6 +99,11 @@ const VerificationModal: React.FC<Props> = ({
 
 	return (
 		<>
+			{!activationMessageShown && (
+				<Typography variant='body1'>
+					Please wait while we activate your account...
+				</Typography>
+			)}
 			<Modal isOpen={true} onClose={onClose} placement='top-center'>
 				<ModalContent>
 					<ModalHeader className='flex justify-center'>
@@ -120,34 +131,30 @@ const VerificationModal: React.FC<Props> = ({
 							{({ isSubmitting }) => (
 								<Form>
 									<div className='flex flex-row justify-center gap-2'>
-										{[inputRef1, inputRef2, inputRef3, inputRef4].map(
-											(inputRef, index) => (
-												<Field key={index} name={`digit${index + 1}`}>
-													{({ field, meta }: any) => (
-														<Input
-															{...field}
-															ref={inputRef}
-															label=''
-															className='border-2 border-purple-200 text-center rounded-2xl'
-															error={meta.touched && meta.error}
-															placeholder={(index + 1).toString()}
-															maxLength={1}
-															onInput={(
-																e: React.FormEvent<HTMLInputElement>
-															) => {
-																if (
-																	e.currentTarget.value.length === 1 &&
-																	index < 3 &&
-																	inputRef.current
-																) {
-																	inputRef.current.focus();
-																}
-															}}
-														/>
-													)}
-												</Field>
-											)
-										)}
+										{[1, 2, 3, 4].map((index) => (
+											<Field key={index} name={`digit${index}`}>
+												{({ field, meta }: any) => (
+													<Input
+														{...field}
+														ref={inputRefs[index - 1]}
+														label=''
+														className='border-2 border-purple-200 text-center rounded-2xl'
+														error={meta.touched && meta.error}
+														placeholder={index.toString()}
+														maxLength={1}
+														onInput={(e: React.FormEvent<HTMLInputElement>) => {
+															if (
+																e.currentTarget.value.length === 1 &&
+																index < 4 &&
+																inputRefs[index]?.current
+															) {
+																inputRefs[index]?.current?.focus();
+															}
+														}}
+													/>
+												)}
+											</Field>
+										))}
 									</div>
 									<div className='flex justify-center mt-5'>
 										<Button
@@ -175,19 +182,13 @@ const VerificationModal: React.FC<Props> = ({
 						</Formik>
 					</ModalBody>
 				</ModalContent>
-
-				<Snackbar
-					open={snackbarOpen}
-					onClose={() => {
-						setSnackbarOpen(false);
-					}}
-					autoHideDuration={6000}
-					anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-				>
-					{/* Wrap the Typography component inside Snackbar */}
-					<Typography variant='body1'>{snackbarMessage}</Typography>
-				</Snackbar>
 			</Modal>
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleCloseSnackbar}
+				message={snackbarMessage}
+			/>
 		</>
 	);
 };
