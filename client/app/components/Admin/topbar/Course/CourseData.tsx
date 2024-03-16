@@ -1,3 +1,4 @@
+"use client";
 import { AddCircleOutlineRounded } from "@mui/icons-material";
 import { Button } from "@nextui-org/button";
 import { Textarea } from "@nextui-org/input";

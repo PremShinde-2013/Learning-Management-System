@@ -113,7 +113,6 @@ const Navbar: FC<Props> = () => {
 	return (
 		<>
 			<NextUINavbar maxWidth='xl' position='sticky'>
-				{/* Navbar content here */}
 				<NavbarBrand as='li' className='gap-3 max-w-fit'>
 					<NextLink className='flex justify-start items-center gap-1' href='/'>
 						<Logo />

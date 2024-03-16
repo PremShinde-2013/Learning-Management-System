@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-	name: "Next.js + NextUI",
+	name: "LearniflyPro",
 	description: "Make beautiful websites regardless of your design experience.",
 	navItems: [
 		{
@@ -56,10 +56,10 @@ export const siteConfig = {
 		},
 	],
 	links: {
-		github: "https://github.com/nextui-org/nextui",
-		twitter: "https://twitter.com/getnextui",
-		docs: "https://nextui.org",
-		discord: "https://discord.gg/9b6yyZKmH4",
+		github: "https://github.com/PremShinde-2013",
+		twitter: "https://github.com/PremShinde-2013",
+		docs: "https://github.com/PremShinde-2013",
+		discord: "https://github.com/PremShinde-2013",
 		sponsor: "https://patreon.com/jrgarciadev",
 	},
 };

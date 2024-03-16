@@ -1,3 +1,4 @@
+"use client";
 import React, { FC } from "react";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import Box from "@mui/material/Box";

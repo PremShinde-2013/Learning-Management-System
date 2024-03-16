@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import React, { FC, useState } from "react";
 import {
 	Card,
@@ -12,6 +13,7 @@ import {
 	Button,
 } from "@nextui-org/react";
 import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 
 type Props = {
 	courseInfo: any;
@@ -295,13 +297,22 @@ const CourseInformation: FC<Props> = ({
 					</CardFooter>
 				</Card>
 			</form>
+
 			<Snackbar
 				open={openSnackbar}
 				autoHideDuration={6000}
 				onClose={handleCloseSnackbar}
-				message={errorMessage}
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
-			/>
+			>
+				<MuiAlert
+					elevation={6}
+					variant='filled'
+					severity='error'
+					onClose={handleCloseSnackbar}
+				>
+					{errorMessage}
+				</MuiAlert>
+			</Snackbar>
 		</div>
 	);
 };

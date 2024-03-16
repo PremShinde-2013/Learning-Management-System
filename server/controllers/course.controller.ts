@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, response } from "express";
 import { catchAsyncErrors } from "../middelware/catchAsyncErrors";
 
 import ErrorHandler from "../utils/ErrorHandler";
@@ -12,6 +12,7 @@ import path from "path";
 import ejs, { Template } from "ejs";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.Model";
+import axios from "axios";
 
 // Now you can use ejs in your TypeScript code
 
@@ -457,6 +458,30 @@ export const deleteCourse = catchAsyncErrors(
 				success: true,
 				message: "Course deleted successfully",
 			});
+		} catch (error: any) {
+			return next(new ErrorHandler(error.message, 400));
+		}
+	}
+);
+
+// generate video url
+
+export const generateVideoUrl = catchAsyncErrors(
+	async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const { videoId } = req.body;
+			const response = await axios.post(
+				`https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+				{ ttl: 300 },
+				{
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+						Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
+					},
+				}
+			);
+			res.json(response.data);
 		} catch (error: any) {
 			return next(new ErrorHandler(error.message, 400));
 		}
