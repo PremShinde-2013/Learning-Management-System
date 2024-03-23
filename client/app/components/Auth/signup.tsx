@@ -15,7 +15,7 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup"; // Import Yup for validation
-import { MailIcon } from "../icons";
+import { MailIcon } from "@/components/icons";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 import Authentication from "./authentication";

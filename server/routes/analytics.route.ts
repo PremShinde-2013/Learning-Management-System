@@ -1,34 +1,32 @@
 import express from "express";
-import { authorizeRoles, isAuthenticated } from "../middelware/auth";
-
 import {
-	getCoursesAnalytics,
-	getOrdersAnalytics,
-	getUserAnalytics,
+  getCoursesAnalytics,
+  getOrdersAnalytics,
+  getUsersAnalytics,
 } from "../controllers/analytics.controller";
-import { updateAccessToken } from "../controllers/user.controller";
+import { authorizeRoles, isAuthenticated } from "../middleware/auth";
+
 const analyticsRouter = express.Router();
 
 analyticsRouter.get(
-	"/get-user-analytics",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	getUserAnalytics
+  "/get-users-analytics-admin",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getUsersAnalytics
 );
+
 analyticsRouter.get(
-	"/get-orders-analytics",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	getOrdersAnalytics
+  "/get-courses-analytics-admin",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getCoursesAnalytics
 );
+
 analyticsRouter.get(
-	"/get-courses-analytics",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	getCoursesAnalytics
+  "/get-orders-analytics-admin",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getOrdersAnalytics
 );
 
 export default analyticsRouter;

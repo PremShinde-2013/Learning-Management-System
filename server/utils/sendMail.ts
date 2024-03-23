@@ -1,7 +1,8 @@
-require("dotenv").config();
-import nodemailer, { Transporter } from "nodemailer";
 import ejs from "ejs";
+import nodemailer, { Transporter } from "nodemailer";
 import path from "path";
+
+require("dotenv").config();
 
 interface EmailOptions {
   email: string;
@@ -20,11 +21,11 @@ const sendMail = async (options: EmailOptions): Promise<void> => {
       pass: process.env.SMTP_PASSWORD,
     },
   });
+
   const { email, subject, template, data } = options;
 
-  //   get pdath to the email template file
   const templatePath = path.join(__dirname, "../mails", template);
-  // render email templte with EJS
+
   const html: string = await ejs.renderFile(templatePath, data);
 
   const mailOptions = {
@@ -33,6 +34,7 @@ const sendMail = async (options: EmailOptions): Promise<void> => {
     subject,
     html,
   };
+
   await transporter.sendMail(mailOptions);
 };
 

@@ -1,89 +1,72 @@
 import express from "express";
 import {
-	addAnswer,
-	addQuestion,
-	addReplyToReview,
-	addReview,
-	deleteCourse,
-	editCourse,
-	generateVideoUrl,
-	getAllCources,
-	getAllCourse,
-	getCourseByUser,
-	getSingleCourse,
-	uploadCourse,
+  addAnswer,
+  addQuestion,
+  addReplyToReview,
+  addReview,
+  deleteCourse,
+  editCourse,
+  generateVideoUrl,
+  getAllCourses,
+  getAllCoursesAdmin,
+  getCourseContentByUser,
+  getSingleCourse,
+  uploadCourse,
 } from "../controllers/course.controller";
-import { authorizeRoles, isAuthenticated } from "../middelware/auth";
-import { updateAccessToken } from "../controllers/user.controller";
-
+import { authorizeRoles, isAuthenticated } from "../middleware/auth";
 const courseRouter = express.Router();
 
 courseRouter.post(
-	"/create-course",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	uploadCourse
+  "/upload-course",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  uploadCourse
 );
+
 courseRouter.put(
-	"/edit-course/:id",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	editCourse
+  "/edit-course/:id",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  editCourse
 );
 
-courseRouter.get("/edit-course/:id", getSingleCourse);
+courseRouter.get("/get-single-course/:id", getSingleCourse);
 
-courseRouter.get("/get-course/", getAllCourse);
+courseRouter.get("/get-all-courses", getAllCourses);
 
 courseRouter.get(
-	"/get-course-content/:id",
-	updateAccessToken,
-	isAuthenticated,
-	getCourseByUser
+  "/get-course-content/:id",
+  isAuthenticated,
+  getCourseContentByUser
 );
 
-courseRouter.put(
-	"/add-question",
-	updateAccessToken,
-	isAuthenticated,
-	addQuestion
-);
+courseRouter.put("/add-question", isAuthenticated, addQuestion);
 
-courseRouter.put("/add-answer", updateAccessToken, isAuthenticated, addAnswer);
+courseRouter.put("/add-answer", isAuthenticated, addAnswer);
+
+courseRouter.put("/add-review/:id", isAuthenticated, addReview);
 
 courseRouter.put(
-	"/add-review/:id",
-	updateAccessToken,
-	isAuthenticated,
-	addReview
-);
-
-courseRouter.put(
-	"/add-reply",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	addReplyToReview
+  "/add-reply-to-review",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  addReplyToReview
 );
 
 courseRouter.get(
-	"/get-courses",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	getAllCources
+  "/get-all-courses-admin",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getAllCoursesAdmin
+);
+
+courseRouter.delete(
+  "/delete-course/:id",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  deleteCourse
 );
 
 courseRouter.post("/getVdoCipherOTP", generateVideoUrl);
-
-courseRouter.delete(
-	"/delete-course/:id",
-	updateAccessToken,
-	isAuthenticated,
-	authorizeRoles("admin"),
-	deleteCourse
-);
 
 export default courseRouter;

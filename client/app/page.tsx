@@ -10,6 +10,7 @@ import { SparklesPreview } from "./components/sparkles";
 import { Image } from "@nextui-org/react";
 import React, { FC, useState } from "react";
 import Heading from "./utils/Heading";
+import Navbar from "./components/navbar";
 
 interface Props {}
 // export default function Home() {
@@ -21,6 +22,8 @@ const Home: FC<Props> = (props) => {
 				description='Explore coding courses and tutorials tailored for your learning needs at LearnifyPro. Enhance your skills with expert-led programming courses.'
 				keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
 			/>
+			{/* <Navbar//> */}
+
 			<div
 				className='container mx-auto  
 			flex lg:flex-row flex-col justify-evenly'

@@ -16,7 +16,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
-import { MailIcon } from "../icons";
+import { MailIcon } from "@/components/icons";
 import VerificationModal from "./verification";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { Snackbar } from "@mui/material";
