@@ -1,24 +1,25 @@
 import express from "express";
-import { authorizeRoles, isAuthenticated } from "../middleware/auth";
+import { isAuthenticated, authorizeRoles } from "../middelware/auth";
 import {
-  getAllNotifications,
-  updateNotificationStatus,
+	getNotifications,
+	updateNotification,
 } from "../controllers/notification.controller";
+import { updateAccessToken } from "../controllers/user.controller";
+const NotificationRouter = express.Router();
 
-const notificationRouter = express.Router();
-
-notificationRouter.get(
-  "/get-all-notifications",
-  isAuthenticated,
-  authorizeRoles("admin"),
-  getAllNotifications
+NotificationRouter.get(
+	"/get-all-notifications",
+	updateAccessToken,
+	isAuthenticated,
+	authorizeRoles("admin"),
+	getNotifications
+);
+NotificationRouter.put(
+	"/update-notification/:id",
+	updateAccessToken,
+	isAuthenticated,
+	authorizeRoles("admin"),
+	updateNotification
 );
 
-notificationRouter.put(
-  "/update-notification-status/:id",
-  isAuthenticated,
-  authorizeRoles("admin"),
-  updateNotificationStatus
-);
-
-export default notificationRouter;
+export default NotificationRouter;

@@ -1,62 +1,69 @@
+import NotificationModel from "../models/notification.Model";
 import { NextFunction, Request, Response } from "express";
-import cron from "node-cron";
-import { CatchAsyncError } from "../middleware/catchAsyncErrors";
+import { catchAsyncErrors } from "../middelware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
-import NotificationModel from "../models/notification.model";
+import cron from "node-cron";
 
-export const getAllNotifications = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const notifications = await NotificationModel.find().sort({
-        createdAt: -1,
-      });
+// get all notification --- only admin
 
-      res.status(201).json({
-        success: true,
-        notifications,
-      });
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  }
+export const getNotifications = catchAsyncErrors(
+	async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const notifications = await NotificationModel.find().sort({
+				createdAt: -1,
+			});
+
+			res.status(201).json({
+				success: true,
+				notifications,
+			});
+		} catch (error: any) {
+			return next(new ErrorHandler(error.message, 400));
+		}
+	}
 );
 
-export const updateNotificationStatus = CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const notification = await NotificationModel.findById(req.params.id);
+// update notifications status   --- only admin
 
-      if (notification) {
-        notification.status = notification.status
-          ? "read"
-          : notification.status;
+export const updateNotification = catchAsyncErrors(
+	async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const notification = await NotificationModel.findById(req.params.id);
 
-        await notification.save();
-      } else {
-        return next(new ErrorHandler("Notification not found", 404));
-      }
-
-      await notification.save();
-
-      const notifications = await NotificationModel.find().sort({
-        createdAt: -1,
-      });
-
-      res.status(201).json({
-        success: true,
-        notifications,
-      });
-    } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  }
+			if (!notification) {
+				return next(new ErrorHandler("Notification not found", 400));
+			} else {
+				notification.status
+					? (notification.status = "read")
+					: notification?.status;
+			}
+			await notification.save();
+			const notifications = await NotificationModel.find().sort({
+				createdAt: -1,
+			});
+			res.status(201).json({
+				success: true,
+				notifications,
+			});
+		} catch (error: any) {
+			return next(new ErrorHandler(error.message, 400));
+		}
+	}
 );
+
+// delete notification ---******** only admin
+
+// cron.schedule("*/5 * * * * *", function () {
+// 	console.log("====================================");
+// 	console.log("running cron");
+// 	console.log("====================================");
+// });
 
 cron.schedule("0 0 0 * * *", async () => {
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-
-  await NotificationModel.deleteMany({
-    status: "read",
-    createdAt: { $lt: thirtyDaysAgo },
-  });
+	const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+	await NotificationModel.deleteMany({
+		status: "read",
+		createdAt: { $lt: thirtyDaysAgo },
+	});
+	console.log("deleted read notification");
 });
