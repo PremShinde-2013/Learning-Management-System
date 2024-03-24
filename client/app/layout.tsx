@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
+
 import Navbar from "./components/navbar";
 import { Link } from "@nextui-org/link";
 import socketIO from "socket.io-client";
@@ -65,6 +67,7 @@ export default function RootLayout({
 								</Link>
 							</footer>
 						</div>
+						<Toaster position='top-center' reverseOrder={false} />
 					</SessionProvider>
 				</Providers>
 			</body>

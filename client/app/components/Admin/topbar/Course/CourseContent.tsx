@@ -118,8 +118,14 @@ const CourseContent: FC<Props> = ({
 	};
 
 	const addNewSection = () => {
-		const lastSection = courseContentData[courseContentData.length - 1];
 		if (
+			courseContentData.length === 0 ||
+			!courseContentData[courseContentData.length - 1]
+		) {
+			// Handle the case when courseContentData is empty or the last section doesn't exist
+			setError("Please add content to the previous section first!");
+			setOpenSnackbar(true);
+		} else if (
 			courseContentData[courseContentData.length - 1].title === "" ||
 			courseContentData[courseContentData.length - 1].description === "" ||
 			courseContentData[courseContentData.length - 1].videoUrl === "" ||
@@ -139,16 +145,6 @@ const CourseContent: FC<Props> = ({
 			};
 			setCourseContentData([...courseContentData, newContent]);
 		}
-
-		const newSection = {
-			videoUrl: "",
-			title: "",
-			description: "",
-			videoSection: `Untitled Section ${activeSection}`,
-			links: [{ title: "", url: "" }],
-		};
-
-		setCourseContentData([...courseContentData, newSection]);
 	};
 
 	const handleSubmit = (e: any) => {
@@ -171,6 +167,7 @@ const CourseContent: FC<Props> = ({
 										className={`w-full p-4 ${
 											showSectionInput ? "mt-10" : "mb-0"
 										}`}
+										key={index}
 									>
 										{showSectionInput && (
 											<>

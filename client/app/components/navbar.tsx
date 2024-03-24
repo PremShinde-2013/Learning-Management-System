@@ -20,6 +20,7 @@ import clsx from "clsx";
 import { usePathname } from "next/navigation";
 
 import { ThemeSwitch } from "@/components/theme-switch";
+
 import {
 	TwitterIcon,
 	GithubIcon,
@@ -44,6 +45,7 @@ import { Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { avatar } from "@nextui-org/theme";
 import Loader from "./Loader/Loader";
+import { useTheme } from "next-themes";
 
 type Props = {};
 
@@ -52,6 +54,7 @@ const Navbar: FC<Props> = () => {
 	const [showAuthentication, setShowAuthentication] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const [snackbarMessage, setSnackbarMessage] = useState("");
+	const { theme, setTheme } = useTheme(); // Use useTheme hook to access theme state and setter
 
 	const {
 		data: userData,
@@ -71,6 +74,10 @@ const Navbar: FC<Props> = () => {
 	const handleOpenSnackbar = (message: any) => {
 		setSnackbarMessage(message);
 		setOpenSnackbar(true);
+	};
+	const toggleTheme = () => {
+		// Toggle between light and dark themes
+		setTheme(theme === "light" ? "dark" : "light");
 	};
 	useEffect(() => {
 		if (isLoading) {
@@ -187,8 +194,9 @@ const Navbar: FC<Props> = () => {
 								>
 									<GithubIcon className='text-default-500' />
 								</Link>
-								<ThemeSwitch />
 							</NavbarItem>
+							<ThemeSwitch toggleTheme={toggleTheme} />
+
 							<NavbarItem className='hidden lg:flex'>{searchInput}</NavbarItem>
 							<NavbarItem className='hidden md:flex'>
 								<Button
@@ -262,7 +270,7 @@ const Navbar: FC<Props> = () => {
 									/>
 								)}
 							</NavbarItem>
-							<ThemeSwitch />
+							<ThemeSwitch toggleTheme={toggleTheme} />
 							<NavbarMenuToggle />
 						</NavbarContent>
 

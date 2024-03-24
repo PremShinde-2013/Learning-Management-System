@@ -97,20 +97,15 @@ const CourseData: FC<Props> = ({
 				</CardHeader>
 				<CardBody className='gap-3'>
 					{benefits.map((benefits: any, index: number) => (
-						<>
-							<Divider />
-							<Input
-								key={index}
-								type='text'
-								variant='bordered'
-								required
-								value={benefits.title}
-								placeholder='You will lbe able to learn  FUll stack Lms Platform'
-								onChange={(e: any) =>
-									handleBenefitChanges(index, e.target.value)
-								}
-							/>
-						</>
+						<Input
+							key={index}
+							type='text'
+							variant='bordered'
+							required
+							value={benefits.title}
+							placeholder='You will lbe able to learn  FUll stack Lms Platform'
+							onChange={(e: any) => handleBenefitChanges(index, e.target.value)}
+						/>
 					))}
 					<AddBoxRoundedIcon
 						className='cursor-pointer'
@@ -125,20 +120,17 @@ const CourseData: FC<Props> = ({
 				</CardHeader>
 				<CardBody className='gap-3'>
 					{prerequisites.map((prerequisites: any, index: number) => (
-						<>
-							<Divider />
-							<Input
-								key={index}
-								type='text'
-								variant='bordered'
-								required
-								value={prerequisites.title}
-								placeholder='You will lbe able to learn  FUll stack Lms Platform'
-								onChange={(e: any) =>
-									handlePrerequisitesChanges(index, e.target.value)
-								}
-							/>
-						</>
+						<Input
+							key={index}
+							type='text'
+							variant='bordered'
+							required
+							value={prerequisites.title}
+							placeholder='You will lbe able to learn  FUll stack Lms Platform'
+							onChange={(e: any) =>
+								handlePrerequisitesChanges(index, e.target.value)
+							}
+						/>
 					))}
 					<AddBoxRoundedIcon
 						className='cursor-pointer'

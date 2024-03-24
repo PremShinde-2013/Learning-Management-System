@@ -70,38 +70,33 @@ const CreateCourse = (props: Props) => {
 
 	const [courseData, setCourseData] = useState({});
 	const handleSubmit = async () => {
-		//   Format benefits array
-
 		const formattedBenefits = benefits.map((benefit) => ({
 			title: benefit.title,
 		}));
 
-		// format prerequisites array
-
-		const formattedPrerequisites = prerequisites.map((prerequisites) => ({
-			title: prerequisites.title,
+		const formattedPrerequisites = prerequisites.map((prerequisite) => ({
+			title: prerequisite.title,
 		}));
 
-		// format course content array
 		const formattedCourseContentData = courseContentData.map(
-			(CourseContent) => ({
-				videoUrl: CourseContent.videoUrl,
-				title: CourseContent.title,
-				description: CourseContent.description,
-				videoSection: CourseContent.videoSection,
-				links: CourseContent.links.map((link) => ({
+			(courseContent) => ({
+				videoUrl: courseContent.videoUrl,
+				title: courseContent.title,
+				description: courseContent.description,
+				// videoLength: courseContent.videoLength,
+				videoSection: courseContent.videoSection,
+				links: courseContent.links.map((link) => ({
 					title: link.title,
 					url: link.url,
 				})),
-				suggestion: CourseContent.suggestion,
+				suggestion: courseContent.suggestion,
 			})
 		);
-
-		// prepare our data object
 
 		const data = {
 			name: courseInfo.name,
 			description: courseInfo.description,
+			// categories: courseInfo.categories,
 			price: courseInfo.price,
 			estimatedPrice: courseInfo.estimatedPrice,
 			tags: courseInfo.tags,
@@ -111,16 +106,14 @@ const CreateCourse = (props: Props) => {
 			totalVideos: courseContentData.length,
 			benefits: formattedBenefits,
 			prerequisites: formattedPrerequisites,
-			CourseContent: formattedCourseContentData,
+			courseData: formattedCourseContentData,
 		};
-
 		setCourseData(data);
 	};
-
 	const handleCourseCreate = async (e: any) => {
-		const data = courseData;
-
-		await createCourse(data);
+		if (!isLoading) {
+			await createCourse(courseData);
+		}
 	};
 
 	return (

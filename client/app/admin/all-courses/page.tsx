@@ -1,4 +1,5 @@
 "use client";
+import AllCourses from "@/app/components/Admin/AllCourses";
 /* eslint-disable react-hooks/rules-of-hooks */
 import AdminTopbar from "@/app/components/Admin/topbar/AdminTopbar";
 import AdminProtected from "@/app/hooks/adminProtected";
@@ -53,6 +54,7 @@ const page: FC<Props> = () => {
 					</div>
 				</div>
 				<AdminTopbar />
+				<AllCourses />
 			</AdminProtected>
 		</div>
 	);
