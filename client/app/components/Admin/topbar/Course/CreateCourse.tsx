@@ -7,22 +7,24 @@ import CourseContent from "./CourseContent";
 import CoursePreview from "./CoursePreview";
 import { useCreateCourseMutation } from "@/redux/features/courses/coursesApi";
 import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 type Props = {};
 
-const CreateCourse = (props: Props) => {
+const CreateCourse = ({}: Props) => {
 	const [createCourse, { isLoading, isSuccess, error }] =
 		useCreateCourseMutation();
 
 	useEffect(() => {
 		if (isSuccess) {
-			console.log("course created successfully");
+			toast.success("course created successfully");
 			redirect("/admin/all-courses");
 		}
 		if (error) {
 			if ("data" in error) {
 				const errorMessage = error as any;
-				console.log(errorMessage.data.message);
+				// console.log(errorMessage.data.message);
+				toast.error(errorMessage.data.message);
 			}
 		}
 	}, [isLoading, isSuccess, error]);
@@ -47,6 +49,7 @@ const CreateCourse = (props: Props) => {
 		estimatedPrice: "",
 		tags: "",
 		level: "",
+		categories: "",
 		demoUrl: "",
 		thumbnail: "",
 	});
@@ -58,6 +61,7 @@ const CreateCourse = (props: Props) => {
 			title: "",
 			description: "",
 			videoSection: "Untitled Section",
+			videoLength: "",
 			links: [
 				{
 					title: "",
@@ -83,7 +87,7 @@ const CreateCourse = (props: Props) => {
 				videoUrl: courseContent.videoUrl,
 				title: courseContent.title,
 				description: courseContent.description,
-				// videoLength: courseContent.videoLength,
+				videoLength: courseContent.videoLength,
 				videoSection: courseContent.videoSection,
 				links: courseContent.links.map((link) => ({
 					title: link.title,
@@ -96,7 +100,7 @@ const CreateCourse = (props: Props) => {
 		const data = {
 			name: courseInfo.name,
 			description: courseInfo.description,
-			// categories: courseInfo.categories,
+			categories: courseInfo.categories,
 			price: courseInfo.price,
 			estimatedPrice: courseInfo.estimatedPrice,
 			tags: courseInfo.tags,
@@ -115,6 +119,9 @@ const CreateCourse = (props: Props) => {
 			await createCourse(courseData);
 		}
 	};
+
+	console.log(courseInfo);
+	console.log(courseData);
 
 	return (
 		<div className='flex md:flex-row flex-col relative'>

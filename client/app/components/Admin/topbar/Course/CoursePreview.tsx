@@ -20,6 +20,7 @@ type Props = {
 	setActiveStep: (active: number) => void;
 	courseData: any;
 	handleCourseCreate: any;
+	isEdit?: boolean;
 };
 
 const CoursePreview: FC<Props> = ({
@@ -27,6 +28,7 @@ const CoursePreview: FC<Props> = ({
 	handleCourseCreate,
 	setActiveStep,
 	activeStep,
+	isEdit,
 }) => {
 	const discountPercentage =
 		((courseData?.estimatedPrice - courseData?.price) /
@@ -44,7 +46,7 @@ const CoursePreview: FC<Props> = ({
 	};
 
 	return (
-		<Card className='md:min-w-[1000px]'>
+		<Card className='md:max-w-[1000px] '>
 			<CardHeader className='flex w-full'>
 				<div className='w-full h-full'>
 					<CoursePlayer
@@ -155,7 +157,7 @@ const CoursePreview: FC<Props> = ({
 					className='px-8'
 					onClick={() => createCourse()}
 				>
-					Next
+					{isEdit ? "Update" : "Create"}
 				</Button>
 			</CardFooter>
 		</Card>

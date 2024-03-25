@@ -19,6 +19,7 @@ import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import toast from "react-hot-toast";
 
 type Props = {
 	activeStep: number;
@@ -67,28 +68,14 @@ const CourseContent: FC<Props> = ({
 		setOpenSnackbar(false);
 	};
 
-	const handleCollapseToggle = (index: number) => {
-		const updatedCOllapsed = [...isCollapsed];
-		updatedCOllapsed[index] = !updatedCOllapsed[index];
-		setIsCollapsed(updatedCOllapsed);
-	};
-	const handleRemoveLink = (index: number, linkIndex: number) => {
-		const updatedData = [...courseContentData];
-		updatedData[index].links.splice(linkIndex, 1);
-		setCourseContentData(updatedData);
-	};
-	const handleAddLink = (index: number) => {
-		const updatedData = [...courseContentData];
-		updatedData[index].links.push({ title: "", url: " " });
-		setCourseContentData(updatedData);
-	};
 	const newContentHandler = (item: any) => {
 		if (
 			item.title === "" ||
 			item.description === "" ||
 			item.videoUrl === "" ||
 			item.links[0].title === "" ||
-			item.links[0].url === ""
+			item.links[0].url === "" ||
+			item.videoLength === ""
 		) {
 			setError("Please fill all fields first!");
 			setOpenSnackbar(true); // Set openSnackbar to true when error occurs
@@ -110,45 +97,77 @@ const CourseContent: FC<Props> = ({
 				title: "",
 				description: "",
 				videoSection: newVideoSection,
+				videoLength: "",
+
 				links: [{ title: "", url: "" }],
 			};
 
 			setCourseContentData([...courseContentData, newContent]);
 		}
+	};
+
+	const handleCollapseToggle = (index: number) => {
+		const updatedCOllapsed = [...isCollapsed];
+		updatedCOllapsed[index] = !updatedCOllapsed[index];
+		setIsCollapsed(updatedCOllapsed);
+	};
+	const handleRemoveLink = (index: number, linkIndex: number) => {
+		const updatedData = [...courseContentData];
+		updatedData[index].links.splice(linkIndex, 1);
+		setCourseContentData(updatedData);
+	};
+	const handleAddLink = (index: number) => {
+		const updatedData = [...courseContentData];
+		const updatedLinks = [...updatedData[index].links]; // Create a copy of links array
+		updatedLinks.push({ title: "", url: "" }); // Add new link
+		updatedData[index] = { ...updatedData[index], links: updatedLinks }; // Update the links array in the object
+		setCourseContentData(updatedData);
 	};
 
 	const addNewSection = () => {
 		if (
-			courseContentData.length === 0 ||
-			!courseContentData[courseContentData.length - 1]
-		) {
-			// Handle the case when courseContentData is empty or the last section doesn't exist
-			setError("Please add content to the previous section first!");
-			setOpenSnackbar(true);
-		} else if (
 			courseContentData[courseContentData.length - 1].title === "" ||
 			courseContentData[courseContentData.length - 1].description === "" ||
 			courseContentData[courseContentData.length - 1].videoUrl === "" ||
 			courseContentData[courseContentData.length - 1].links[0].title === "" ||
-			courseContentData[courseContentData.length - 1].links[0].title === ""
+			courseContentData[courseContentData.length - 1].links[0].url === ""
 		) {
-			setError("Please fill all fields of the last section first!");
-			setOpenSnackbar(true);
-		} else {
-			setActiveSection(activeSection + 1);
-			const newContent = {
-				videoUrl: "",
-				title: "",
-				description: "",
-				videoSection: `Untitled Section ${activeSection}`,
-				links: [{ title: "", url: "" }],
-			};
-			setCourseContentData([...courseContentData, newContent]);
+			toast.error("Please fill all the fields first!");
+			return;
 		}
+
+		setActiveSection(activeSection + 1);
+
+		const newContent = {
+			videoUrl: "",
+			title: "",
+			description: "",
+			videoLength: "",
+			videoSection: `Untitled Section ${activeSection}`,
+			links: [{ title: "", url: "" }],
+		};
+
+		setCourseContentData([...courseContentData, newContent]);
 	};
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
+	};
+
+	const handleOptions = () => {
+		if (
+			courseContentData[courseContentData.length - 1].title === "" ||
+			courseContentData[courseContentData.length - 1].description === "" ||
+			courseContentData[courseContentData.length - 1].videoUrl === "" ||
+			courseContentData[courseContentData.length - 1].links[0].title === "" ||
+			courseContentData[courseContentData.length - 1].links[0].url === ""
+		) {
+			toast.error("Section can't be empty!");
+		} else {
+			// setActive(active + 1);
+			handleCourseSubmit();
+			setActiveSection(activeSection + 1);
+		}
 	};
 
 	return (
@@ -262,6 +281,37 @@ const CourseContent: FC<Props> = ({
 														onChange={(e: any) => {
 															const updatedData = [...courseContentData];
 															updatedData[index].videoUrl = e.target.value;
+															setCourseContentData(updatedData);
+														}}
+													/>
+													{/* <Input
+														labelPlacement='outside'
+														type='number'
+														label='Video Length  (in minutes)'
+														variant='bordered'
+														placeholder='20'
+														required
+														value={item.videoLength}
+														onChange={(e) => {
+															const updatedData = [...courseContentData];
+															updatedData[index].videoLength = e.target.value;
+															setCourseContentData(updatedData);
+														}}
+													/> */}
+													<label
+													// className={styles.label}
+													>
+														Video Length (in minutes)
+													</label>
+													<input
+														type='number'
+														placeholder='20'
+														// className={`${styles.input}`}
+														className='border-2 rounded-2xl h-12 p-3  bg-transparent'
+														value={item.videoLength}
+														onChange={(e) => {
+															const updatedData = [...courseContentData];
+															updatedData[index].videoLength = e.target.value;
 															setCourseContentData(updatedData);
 														}}
 													/>

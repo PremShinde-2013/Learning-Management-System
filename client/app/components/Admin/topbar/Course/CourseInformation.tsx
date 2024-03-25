@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
 	Card,
 	CardHeader,
@@ -11,9 +11,12 @@ import {
 	Input,
 	Textarea,
 	Button,
+	Select,
+	SelectItem,
 } from "@nextui-org/react";
 import { Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 
 type Props = {
 	courseInfo: any;
@@ -30,6 +33,16 @@ const CourseInformation: FC<Props> = ({
 }) => {
 	const [dragging, setDragging] = useState(false);
 	const [selectedFileName, setSelectedFileName] = useState("");
+
+	const { data } = useGetHeroDataQuery("Categories", {});
+
+	const [categories, setCategories] = useState([]);
+
+	useEffect(() => {
+		if (data) {
+			setCategories(data.layout.categories);
+		}
+	}, [data]);
 
 	const [errorMessage, setErrorMessage] = useState("");
 	const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -95,6 +108,7 @@ const CourseInformation: FC<Props> = ({
 			!courseInfo.description ||
 			!courseInfo.price ||
 			!courseInfo.tags ||
+			!courseInfo.categories ||
 			!courseInfo.level ||
 			!courseInfo.demoUrl ||
 			!courseInfo.thumbnail
@@ -176,19 +190,55 @@ const CourseInformation: FC<Props> = ({
 								}
 							/>
 						</div>
-						<Input
-							labelPlacement='outside'
-							type='text'
-							required
-							variant='bordered'
-							label='Course Tags'
-							value={courseInfo.tags}
-							onChange={(e: any) =>
-								setCourseInfo({ ...courseInfo, tags: e.target.value })
-							}
-							placeholder='MERN, NEXT 13, Socket io, tailwind css'
-						/>
 
+						<div className='flex gap-3'>
+							<Input
+								labelPlacement='outside'
+								type='text'
+								required
+								variant='bordered'
+								label='Course Tags'
+								value={courseInfo.tags}
+								onChange={(e: any) =>
+									setCourseInfo({ ...courseInfo, tags: e.target.value })
+								}
+								placeholder='MERN, NEXT 13, Socket io, tailwind css'
+							/>
+
+							{/* <Select
+								name=''
+								id=''
+								label='Course Categories'
+								variant='bordered'
+								value={courseInfo.categories}
+								onChange={(e) =>
+									setCourseInfo({ ...courseInfo, categories: e.target.value })
+								}
+							>
+								{categories?.map((item: any) => (
+									<SelectItem value={item.title} key={item._id}>
+										{item.title}
+									</SelectItem>
+								))}
+							</Select> */}
+
+							<select
+								name=''
+								id=''
+								className='border-2 rounded-2xl h-10 w-auto mt-6'
+								value={courseInfo.category}
+								onChange={(e: any) =>
+									setCourseInfo({ ...courseInfo, categories: e.target.value })
+								}
+							>
+								<option value=''>Select Category</option>
+								{categories?.map((item: any) => (
+									<option value={item.title} key={item._id}>
+										{item.title}
+									</option>
+								))}
+							</select>
+						</div>
 						<div className='flex gap-3'>
 							<Input
 								labelPlacement='outside'

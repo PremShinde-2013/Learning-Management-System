@@ -30,7 +30,7 @@ const EditCourse: FC<Props> = ({ id }) => {
 	useEffect(() => {
 		if (isSuccess) {
 			toast.success("Course Updated successfully");
-			redirect("/admin/courses");
+			redirect("/admin/all-courses");
 		}
 		if (error && "data" in error) {
 			const errorMessage = error as any;
@@ -200,6 +200,7 @@ const EditCourse: FC<Props> = ({ id }) => {
 					handleCourseCreate={handleCourseCreate}
 					activeStep={activeStep}
 					setActiveStep={setActiveStep}
+					isEdit={true}
 				/>
 			)}
 			<div className='md:fixed md:absolute md:top-0 md:right-0 md:static w-full md:w-auto'>
