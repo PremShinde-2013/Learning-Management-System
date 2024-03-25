@@ -8,6 +8,8 @@ import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import React from "react";
 import EditCategories from "../../components/Admin/Customization/EditCategories";
+import DashboardHero from "@/app/components/Admin/topbar/DashboardHero";
+import Sidebar from "@/app/components/Admin/Sidebar/AdminSidebar";
 
 type Props = {};
 
@@ -23,9 +25,15 @@ const page = ({ params }: any) => {
 					keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
 				/>
 
-				<TopBarAdmin />
-				<DashboardHeader />
-				<EditCategories />
+				<div className='flex h-screen'>
+					<div className='1500px:w-[16%] w-1/5'>
+						<Sidebar />
+					</div>
+					<div className='w-[85%]'>
+						<DashboardHero />
+						<EditCategories />
+					</div>
+				</div>
 			</AdminProtected>
 		</div>
 	);

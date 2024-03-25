@@ -1,15 +1,20 @@
 "use client";
 import DashboardHeader from "@/app/components/Admin/DashboardHeader";
-import Sidebar from "@/app/components/Admin/Sidebar/AdminSidebar";
 import TopBarAdmin from "@/app/components/Admin/topbar/AdminTopbar";
-import CreateCourse from "@/app/components/Admin/topbar/Course/CreateCourse";
+
 import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import React from "react";
 
+import CourseAnalytics from "@/app/components/Admin/Analytics/CourseAnalytics";
+import AllInvoices from "@/app/components/Admin/Order/AllInvoices";
+import Sidebar from "@/app/components/Admin/Sidebar/AdminSidebar";
+
 type Props = {};
 
-const page = (props: Props) => {
+const page = ({ params }: any) => {
+	const id = params?.id;
+
 	return (
 		<div>
 			<AdminProtected>
@@ -19,13 +24,17 @@ const page = (props: Props) => {
 					keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
 				/>
 
+				{/* <TopBarAdmin /> */}
+				{/* <Sidebar />
+				<DashboardHeader />
+				<AllInvoices /> */}
 				<div className='flex'>
 					<div className='1500px:w-[16%] w-1/5'>
 						<Sidebar />
 					</div>
 					<div className='w-[85%]'>
 						<DashboardHeader />
-						<CreateCourse />
+						<AllInvoices />
 					</div>
 				</div>
 			</AdminProtected>

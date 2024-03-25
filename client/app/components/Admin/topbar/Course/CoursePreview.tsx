@@ -46,7 +46,7 @@ const CoursePreview: FC<Props> = ({
 	};
 
 	return (
-		<Card className='md:max-w-[1000px] '>
+		<Card className='md:min-w-[750px] '>
 			<CardHeader className='flex w-full'>
 				<div className='w-full h-full'>
 					<CoursePlayer

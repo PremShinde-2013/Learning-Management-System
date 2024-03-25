@@ -2,8 +2,10 @@
 import EditCourse from "@/app/components/Admin/Course/EditCourse";
 import EditHero from "@/app/components/Admin/Customization/EditHero";
 import DashboardHeader from "@/app/components/Admin/DashboardHeader";
+import Sidebar from "@/app/components/Admin/Sidebar/AdminSidebar";
 import TopBarAdmin from "@/app/components/Admin/topbar/AdminTopbar";
 import CreateCourse from "@/app/components/Admin/topbar/Course/CreateCourse";
+import DashboardHero from "@/app/components/Admin/topbar/DashboardHero";
 import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import React from "react";
@@ -22,10 +24,15 @@ const page = ({ params }: any) => {
 					keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
 				/>
 
-				<TopBarAdmin />
-				<DashboardHeader />
-				<EditHero />
-				{/* <CreateCourse /> */}
+				<div className='flex h-screen'>
+					<div className='1500px:w-[16%] w-1/5'>
+						<Sidebar />
+					</div>
+					<div className='w-[85%]'>
+						<DashboardHero />
+						<EditHero />
+					</div>
+				</div>
 			</AdminProtected>
 		</div>
 	);

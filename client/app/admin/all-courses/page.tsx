@@ -1,7 +1,9 @@
 "use client";
 import AllCourses from "@/app/components/Admin/AllCourses";
+import Sidebar from "@/app/components/Admin/Sidebar/AdminSidebar";
 /* eslint-disable react-hooks/rules-of-hooks */
 import AdminTopbar from "@/app/components/Admin/topbar/AdminTopbar";
+import DashboardHero from "@/app/components/Admin/topbar/DashboardHero";
 import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import { Avatar } from "@nextui-org/avatar";
@@ -24,10 +26,10 @@ const page: FC<Props> = () => {
 					description='Explore coding courses and tutorials tailored for your learning needs at LearnifyPro. Enhance your skills with expert-led programming courses.'
 					keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
 				/>
-				<div className='flex justify-center'>
+				{/* <div className='flex justify-center'>
 					<div className='h-[15rem] w-full dark:bg-black bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex items-center justify-center'>
 						{/* Radial gradient for the container to give a faded look */}
-						<div className='absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
+				{/* <div className='absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
 
 						<div className=' flex flex-col  md:mb-16  sm:mb-3'>
 							<div className='flex justify-center'>
@@ -52,9 +54,16 @@ const page: FC<Props> = () => {
 							</div>
 						</div>
 					</div>
+				</div> */}
+				<div className='flex h-screen'>
+					<div className='1500px:w-[16%] w-1/5'>
+						<Sidebar />
+					</div>
+					<div className='w-[85%]'>
+						<DashboardHero />
+						<AllCourses />
+					</div>
 				</div>
-				<AdminTopbar />
-				<AllCourses />
 			</AdminProtected>
 		</div>
 	);

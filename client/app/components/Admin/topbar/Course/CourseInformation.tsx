@@ -122,7 +122,7 @@ const CourseInformation: FC<Props> = ({
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<Card className='md:min-w-[1000px]'>
+				<Card className='md:min-w-[750px] '>
 					<CardHeader className='flex gap-3'>
 						<Input
 							labelPlacement='outside'
@@ -225,7 +225,7 @@ const CourseInformation: FC<Props> = ({
 							<select
 								name=''
 								id=''
-								className='border-2 rounded-2xl h-10 w-auto mt-6'
+								className='border-2 rounded-2xl h-10 w-auto mt-6 bg-transparent '
 								value={courseInfo.category}
 								onChange={(e: any) =>
 									setCourseInfo({ ...courseInfo, categories: e.target.value })
@@ -291,7 +291,7 @@ const CourseInformation: FC<Props> = ({
 									<img
 										src={courseInfo.thumbnail}
 										alt=''
-										className='max-h-full md:max-w-[900px] object-cover w-auto'
+										className='max-h-full md:max-w-[740px] object-cover w-auto'
 									/>
 								) : (
 									<svg

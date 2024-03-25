@@ -89,7 +89,7 @@ const CourseData: FC<Props> = ({
 
 	return (
 		<form>
-			<Card className='md:min-w-[1000px]'>
+			<Card className='md:min-w-[750px]'>
 				<CardHeader className='flex gap-3'>
 					<label className='my-4'>
 						What are benefits for students in this course?

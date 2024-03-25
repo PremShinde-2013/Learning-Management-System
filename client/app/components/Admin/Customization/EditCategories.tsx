@@ -79,7 +79,7 @@ const EditCategories = ({}: EditCategoriesProps) => {
 			{isLoading ? (
 				<Loader />
 			) : (
-				<Card className='mt-12'>
+				<Card className='mt-12 ml-3'>
 					<div className=' mt-6  text-center  flex  flex-col gap-4'>
 						<h1>All Categories</h1>
 						{categories?.map((item: any, index: number) => {

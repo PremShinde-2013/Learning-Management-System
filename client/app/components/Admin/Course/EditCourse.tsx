@@ -165,7 +165,7 @@ const EditCourse: FC<Props> = ({ id }) => {
 	};
 
 	return (
-		<div className='flex md:flex-row flex-col relative'>
+		<div className='flex md:flex-row flex-col relative ml-2'>
 			{activeStep === 0 && (
 				<CourseInformation
 					courseInfo={courseInfo}

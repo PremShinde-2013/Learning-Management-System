@@ -180,7 +180,7 @@ const CourseContent: FC<Props> = ({
 
 					return (
 						<>
-							<Card className='md:min-w-[1000px]  drop-shadow-lg  my-2'>
+							<Card className='md:max-w-[750px]  drop-shadow-lg  '>
 								<CardHeader className='flex gap-3'>
 									<div
 										className={`w-full p-4 ${
@@ -428,7 +428,7 @@ const CourseContent: FC<Props> = ({
 
 				<br />
 				<div
-					className='flex justify-start cursor-pointer my-4 '
+					className='flex justify-start cursor-pointer my-4 ml-2 '
 					onClick={() => addNewSection()}
 				>
 					<Chip
