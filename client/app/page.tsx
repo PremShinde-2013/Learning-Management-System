@@ -11,10 +11,17 @@ import { Image } from "@nextui-org/react";
 import React, { FC, useState } from "react";
 import Heading from "./utils/Heading";
 import Navbar from "./components/navbar";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+import Courses from "./components/Route/Courses";
+import Reviews from "./components/Route/Reviews";
+import FAQ from "./components/FAQ/FAQ";
+import Footer from "./components/Route/Footer";
 
 interface Props {}
 // export default function Home() {
 const Home: FC<Props> = (props) => {
+	const { data, refetch } = useGetHeroDataQuery("Banner", {});
+
 	return (
 		<>
 			<Heading
@@ -34,19 +41,21 @@ const Home: FC<Props> = (props) => {
 						width={240}
 						height={240}
 						alt='NextUI Fruit Image with Zoom'
-						src='https://images.unsplash.com/photo-1708374580439-553f21a95345?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDEzfEpwZzZLaWRsLUhrfHxlbnwwfHx8fHw%3D'
+						src={data?.layout?.banner?.image?.url}
 					/>
 				</section>
 				<section className='flex flex-col items-center justify-center gap-4 py-8 md:py-10'>
-					<div className='inline-block max-w-lg text-center justify-center'>
-						<h1 className={title()}>Make&nbsp;</h1>
-						<h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
+					<div className='inline-block max-w-md text-center justify-center '>
+						<h1 className={title({ color: "violet" })}>
+							{data?.layout?.banner?.title}
+						</h1>
+						{/* <h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
 						<br />
 						<h1 className={title()}>
 							websites regardless of your design experience.
-						</h1>
+						</h1> */}
 						<h2 className={subtitle({ class: "mt-4" })}>
-							Beautiful, fast and modern React UI library.
+							{data?.layout?.banner?.subtitle}
 						</h2>
 					</div>
 
@@ -82,7 +91,12 @@ const Home: FC<Props> = (props) => {
 				</section>
 			</div>
 
-			<SparklesPreview />
+			{/* <SparklesPreview /> */}
+
+			{/* <Courses /> */}
+			<Reviews />
+			<FAQ />
+			<Footer />
 		</>
 	);
 };

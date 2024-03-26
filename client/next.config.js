@@ -7,6 +7,8 @@ const nextConfig = {
 			"img.freepik.com",
 			"cdn-icons-png.freepik.com",
 			"res.cloudinary.com",
+			"images.unsplash.com",
+			"randomuser.me",
 		], // Add your hostname(s) here
 	},
 };
