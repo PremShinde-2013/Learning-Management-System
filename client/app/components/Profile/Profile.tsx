@@ -17,11 +17,11 @@ const Profile: FC<Props> = ({ user }) => {
 	const {} = useLogOutQuery(undefined, {
 		skip: !logout ? true : false,
 	});
-	const logOutHandler = async () => {
-		setLogout(true);
-		await signOut();
-		redirect("/");
-	};
+	// const logOutHandler = async () => {
+	// 	setLogout(true);
+	// 	await signOut();
+	// 	redirect("/");
+	// };
 	return (
 		<div>
 			<h1>{user?.name}</h1>
@@ -31,11 +31,9 @@ const Profile: FC<Props> = ({ user }) => {
 					avatar={avatar}
 					active={active}
 					setActive={setActive}
-					logOutHandler={logOutHandler}
+					// logOutHandler={logOutHandler}
 				/>
-				<BackgroundBeamsDemo />
 			</div>
-			hii
 		</div>
 	);
 };

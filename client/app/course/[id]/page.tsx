@@ -1,6 +1,6 @@
 "use client";
 
-import CourseDetailsPage from "../../components/Course/CourseDetailsPage";
+import CourseDetailsPage from "@/app/components/Course/CourseDetailsPage";
 
 type PageProps = {
 	params: any;

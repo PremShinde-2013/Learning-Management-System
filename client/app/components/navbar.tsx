@@ -46,6 +46,7 @@ import MuiAlert from "@mui/material/Alert";
 import { avatar } from "@nextui-org/theme";
 import Loader from "./Loader/Loader";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -108,25 +109,45 @@ const Navbar: FC<Props> = () => {
 		}
 	}, [error, data, userData, isLoading, socialAuth, refetch, isSuccess]);
 
+	const [search, setSearch] = useState("");
+
+	const router = useRouter();
+
+	const handleSearch = () => {
+		if (search === "") {
+			return;
+		}
+		router.push(`/courses?title=${search}`);
+	};
+
 	const searchInput = (
-		<Input
-			aria-label='Search'
-			classNames={{
-				inputWrapper: "bg-default-100",
-				input: "text-sm",
-			}}
-			endContent={
-				<Kbd className='hidden lg:inline-block' keys={["command"]}>
-					K
-				</Kbd>
-			}
-			labelPlacement='outside'
-			placeholder='Search...'
-			startContent={
-				<SearchIcon className='text-base text-default-400 pointer-events-none flex-shrink-0' />
-			}
-			type='search'
-		/>
+		<>
+			<Input
+				type='search'
+				value={search}
+				aria-label='Search'
+				placeholder='Search Courses...'
+				onChange={(e) => setSearch(e.target.value)}
+				onClick={handleSearch}
+				classNames={{
+					inputWrapper: "bg-default-100",
+					input: "text-sm",
+				}}
+				endContent={
+					<Kbd
+						className='hidden lg:inline-block cursor-pointer'
+						keys={["enter"]}
+						onClick={handleSearch}
+					>
+						Submit
+					</Kbd>
+				}
+				labelPlacement='outside'
+				startContent={
+					<SearchIcon className='text-base text-default-400 pointer-events-none flex-shrink-0' />
+				}
+			/>
+		</>
 	);
 	const handleAvatarClick = () => {
 		setShowAuthentication(true);
@@ -198,7 +219,7 @@ const Navbar: FC<Props> = () => {
 							<ThemeSwitch toggleTheme={toggleTheme} />
 
 							<NavbarItem className='hidden lg:flex'>{searchInput}</NavbarItem>
-							<NavbarItem className='hidden md:flex'>
+							{/* <NavbarItem className='hidden md:flex'>
 								<Button
 									isExternal
 									as={Link}
@@ -209,7 +230,7 @@ const Navbar: FC<Props> = () => {
 								>
 									Sponsor
 								</Button>
-							</NavbarItem>
+							</NavbarItem> */}
 							<NavbarItem className=' md:flex'>
 								{/* Avatar with click event to toggle sign-in modal */}
 								{user ? (
@@ -230,7 +251,7 @@ const Navbar: FC<Props> = () => {
 									</>
 								) : (
 									<Avatar
-										className='hidden lg:flex cursor-pointer'
+										className=' lg:flex cursor-pointer'
 										isBordered
 										radius='full'
 										src='https://i.pravatar.cc/150?u=a04258114e29026708c'
@@ -250,7 +271,6 @@ const Navbar: FC<Props> = () => {
 											<Avatar
 												className=' lg:flex cursor-pointer'
 												isBordered
-												// height={40}
 												radius='full'
 												src={
 													user.avatar
@@ -262,7 +282,7 @@ const Navbar: FC<Props> = () => {
 									</>
 								) : (
 									<Avatar
-										className='hidden lg:flex cursor-pointer'
+										className=' lg:flex cursor-pointer'
 										isBordered
 										radius='full'
 										src='https://i.pravatar.cc/150?u=a04258114e29026708c'

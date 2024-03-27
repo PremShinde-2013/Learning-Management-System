@@ -15,7 +15,7 @@ import {
 	useDisclosure,
 	Image,
 } from "@nextui-org/react";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
 	EyeFilledIcon,
 	EyeSlashFilledIcon,
@@ -29,35 +29,67 @@ import CameraEnhanceRoundedIcon from "@mui/icons-material/CameraEnhanceRounded";
 
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { Typography } from "@mui/material";
 import ProfileInfo from "./ProfileInfo";
 import ChangePassword from "./ChangePassword";
 import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
+import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useLogOutQuery } from "@/redux/features/auth/authApi";
+import CourseCard from "../Course/CourseCard";
 
 type Props = {
 	user: any;
 	active: number;
 	setActive: (active: number) => void;
 	avatar: string | null;
-	logOutHandler: any;
+	// logOutHandler: any;
 };
 
-const TopBarProfile: FC<Props> = ({
-	user,
-	active,
-	setActive,
-	avatar,
-	logOutHandler,
-}) => {
+const TopBarProfile: FC<Props> = ({ user, active, setActive, avatar }) => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [isVisible, setIsVisible] = React.useState(false);
 	const [name, setName] = useState(user && user.name);
+	const [logout, setLogout] = useState(false);
+	const [scroll, setScroll] = useState(false);
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
 
 	const imageHandler = () => {};
 	const handleSubmit = () => {};
+
+	const [courses, setCourses] = useState([]);
+	const { data, isLoading } = useGetUsersAllCoursesQuery(undefined, {});
+
+	const {} = useLogOutQuery(undefined, {
+		skip: logout ? false : true,
+	});
+
+	const logOutHandler = async () => {
+		setLogout(true);
+		await signOut();
+	};
+
+	if (typeof window !== "undefined") {
+		window.addEventListener("scroll", () => {
+			if (window.scrollY > 85) {
+				setScroll(true);
+			} else {
+				setScroll(false);
+			}
+		});
+	}
+
+	useEffect(() => {
+		if (data) {
+			const filteredCourses = user.courses
+				.map((userCourse: any) =>
+					data.courses.find((course: any) => course._id === userCourse._id)
+				)
+				.filter((course: any) => course !== undefined);
+			setCourses(filteredCourses);
+		}
+	}, [data, user.courses]);
 
 	return (
 		<>
@@ -119,7 +151,11 @@ const TopBarProfile: FC<Props> = ({
 							</div>
 						}
 					>
-						<div>hii</div>
+						<div className='grid grid-cols-1 gap-[20px] md:grid-cols-1 md:gap-[25px] lg:grid-cols-2 lg:gap-[25px] 1500px:grid-cols-4 1500px:gap-[35px] mb-12 border-0'>
+							{courses?.map((item: any, index: number) => (
+								<CourseCard item={item} key={index} isProfile={true} />
+							))}
+						</div>
 					</Tab>
 					{user.role === "admin" && (
 						<Tab
@@ -131,9 +167,7 @@ const TopBarProfile: FC<Props> = ({
 								</div>
 							}
 							href={"/admin"}
-						>
-							{/* <div>hii</div> */}
-						</Tab>
+						></Tab>
 					)}
 
 					<Tab

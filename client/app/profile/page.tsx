@@ -2,7 +2,7 @@
 "use client";
 import React, { FC } from "react";
 import Protected from "../hooks/useProtected";
-import Navbar from "@/components/navbar";
+import Navbar from "../components/navbar";
 import Profile from "../components/Profile/Profile";
 import { useSelector } from "react-redux";
 import Heading from "../utils/Heading";

@@ -24,21 +24,30 @@ const CoursePlayer: FC<Props> = ({ videoUrl, title }) => {
 
 	return (
 		<>
-			{videoData.otp && videoData.playbackInfo !== "" && (
-				<iframe
-					src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=v1C4KBMwW4LqQDWm`}
-					style={{
-						border: 0,
-						borderRadius: "16px",
-						width: "100%",
-						height: "100%",
-						top: 0,
-						left: 0,
-					}}
-					allowFullScreen={true}
-					allow='encrypted-media'
-				></iframe>
-			)}
+			<div
+				style={{
+					position: "relative",
+					paddingTop: "56.25%",
+					overflow: "hidden",
+				}}
+			>
+				{videoData.otp && videoData.playbackInfo !== "" && (
+					<iframe
+						src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=v1C4KBMwW4LqQDWm`}
+						style={{
+							position: "absolute",
+							top: 0,
+							left: 0,
+							width: "100%",
+							height: "100%",
+							borderRadius: "16px",
+							border: 0,
+						}}
+						allowFullScreen={true}
+						allow='encrypted-media'
+					/>
+				)}
+			</div>
 		</>
 	);
 };
