@@ -9,9 +9,12 @@ import Heading from "../utils/Heading";
 import CourseCard from "../components/Course/CourseCard";
 import Footer from "../components/Route/Footer";
 import { Chip } from "@nextui-org/react";
+import { useSelector } from "react-redux";
 type PageProps = {};
 
 const CoursesContent = () => {
+	const { user } = useSelector((state: any) => state.auth);
+
 	const searchParams = useSearchParams();
 
 	const search = searchParams?.get("title");
@@ -52,6 +55,11 @@ const CoursesContent = () => {
 				<Loader />
 			) : (
 				<>
+					<Heading
+						title={`${user?.name} Profile - LearnifyPro`}
+						description='Explore coding courses and tutorials tailored for your learning needs at LearnifyPro. Enhance your skills with expert-led programming courses.'
+						keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
+					/>
 					<div className={` m-auto flex justify-center flex-col`}>
 						<Heading
 							title={"All courses - LearnifyPro"}
@@ -63,9 +71,12 @@ const CoursesContent = () => {
 						<br />
 						<div className=' flex justify-center items-center flex-wrap gap-6'>
 							<Chip
-								className={`h-[35px] ${
-									category === "All" ? "bg-purple-800" : "bg-purple-600"
-								} m-3 px-3 rounded-[30px] flex items-center justify-center font-Poppins cursor-pointer`}
+								variant='faded'
+								// color='danger'
+								radius='md'
+								className={` h-10 w-auto ${
+									category === "All" ? "bg-purple-600" : "bg-purple-500"
+								}  cursor-pointer`}
 								onClick={() => setCategory("All")}
 							>
 								All
@@ -74,11 +85,14 @@ const CoursesContent = () => {
 							{categories?.map((item: any, index: number) => (
 								<div key={index}>
 									<Chip
-										className={`h-[35px] ${
+										variant='faded'
+										// color='danger'
+										radius='md'
+										className={` h-10 w-auto ${
 											category === item.title
-												? "bg-purple-800"
-												: "bg-purple-600"
-										} m-3 px-3 rounded-[30px] flex items-center justify-center font-Poppins cursor-pointer`}
+												? "bg-purple-600"
+												: "bg-purple-500"
+										}  cursor-pointer`}
 										onClick={() => setCategory(item.title)}
 									>
 										{item.title}

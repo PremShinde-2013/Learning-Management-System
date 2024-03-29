@@ -10,7 +10,7 @@ import DashboardHero from "../components/Admin/topbar/DashboardHero";
 import Sidebar from "../components/Admin/Sidebar/AdminSidebar";
 
 type Props = {};
-const page: FC<Props> = () => {
+const Page: FC<Props> = () => {
 	const { user } = useSelector((state: any) => state.auth);
 
 	const [active, setActive] = useState(1);
@@ -39,4 +39,4 @@ const page: FC<Props> = () => {
 	);
 };
 
-export default page;
+export default Page;

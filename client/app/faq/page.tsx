@@ -3,8 +3,12 @@ import { title } from "@/components/primitives";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import Heading from "../utils/Heading";
+import { useSelector } from "react-redux";
 
 export default function AboutPage() {
+	const { user } = useSelector((state: any) => state.auth);
+
 	const { data, isLoading } = useGetHeroDataQuery("FAQ", {});
 
 	const [activeQuestion, setActiveQuestion] = useState(null);
@@ -22,6 +26,11 @@ export default function AboutPage() {
 	};
 	return (
 		<>
+			<Heading
+				title={`${user?.name} Profile - LearnifyPro`}
+				description='Explore coding courses and tutorials tailored for your learning needs at LearnifyPro. Enhance your skills with expert-led programming courses.'
+				keywords='coding courses, programming tutorials, web development, software engineering, computer science, programming languages, coding bootcamp'
+			/>
 			<div className={`m-auto flex justify-center flex-col mt-28 mb-20`}>
 				<h1 className={title({ class: "text-center " })}>
 					Frequently Asked

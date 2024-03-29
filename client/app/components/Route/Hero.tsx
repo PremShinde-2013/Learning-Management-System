@@ -59,7 +59,7 @@ const Hero = ({}: HeroProps) => {
 							</h2>
 						</div>
 
-						<div className='flex gap-3'>
+						{/* <div className='flex gap-3'>
 							<Link
 								isExternal
 								href={siteConfig.links.docs}
@@ -82,16 +82,16 @@ const Hero = ({}: HeroProps) => {
 								<GithubIcon size={20} />
 								GitHub
 							</Link>
-						</div>
+						</div> */}
 
-						<div className='mt-8'>
+						{/* <div className='mt-8'>
 							<Snippet hideSymbol hideCopyButton variant='flat'>
 								<span>
 									Get started by editing{" "}
 									<Code color='primary'>app/page.tsx</Code>
 								</span>
 							</Snippet>
-						</div>
+						</div> */}
 					</section>
 				</div>
 			)}

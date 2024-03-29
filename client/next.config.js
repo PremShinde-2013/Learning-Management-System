@@ -11,6 +11,9 @@ const nextConfig = {
 			"randomuser.me",
 		], // Add your hostname(s) here
 	},
+	experimental: {
+		suppressHydrationWarning: true,
+	},
 };
 
 module.exports = nextConfig;

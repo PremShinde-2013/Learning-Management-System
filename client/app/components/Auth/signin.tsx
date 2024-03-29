@@ -22,6 +22,7 @@ import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { Snackbar } from "@mui/material";
 
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 interface Props {
 	onClose: () => void;
 	toggleSignUpModal: () => void;
@@ -47,18 +48,20 @@ const SignInModal: React.FC<Props> = ({ onClose, toggleSignUpModal }) => {
 	useEffect(() => {
 		if (isSuccess) {
 			console.log("Login Successfully!");
-			setSnackbarMessage("Login successful!"); // Set the success message
+			// setSnackbarMessage("Login successful!"); // Set the success message
+			toast.success("Login successful!");
 			setSnackbarOpen(true); // Open Snackbar to display success message
 
 			setTimeout(() => {
 				setSnackbarOpen(false);
 				onClose();
-			}, 8000);
+			}, 4000);
 		}
 		if (error) {
 			if ("data" in error) {
 				const errorData = error as any;
-				setSnackbarMessage(errorData.data.message);
+				// setSnackbarMessage(errorData.data.message);
+				toast.error(errorData.data.message);
 				setSnackbarOpen(true);
 			}
 		}
@@ -158,7 +161,7 @@ const SignInModal: React.FC<Props> = ({ onClose, toggleSignUpModal }) => {
 							<div
 								className='cursor-pointer'
 								onClick={async () => {
-									await signIn();
+									await signIn("google");
 								}}
 							>
 								<GoogleIcon />
@@ -184,13 +187,6 @@ const SignInModal: React.FC<Props> = ({ onClose, toggleSignUpModal }) => {
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
-			<Snackbar
-				className='rounded-xl  '
-				open={snackbarOpen}
-				autoHideDuration={6000}
-				onClose={handleSnackbarClose}
-				message={snackbarMessage}
-			/>
 		</>
 	);
 };

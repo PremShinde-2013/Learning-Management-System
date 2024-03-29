@@ -12,7 +12,7 @@ import React, { FC, useState } from "react";
 import { useSelector } from "react-redux";
 
 type Props = {};
-const page: FC<Props> = () => {
+const Page: FC<Props> = () => {
 	const { user } = useSelector((state: any) => state.auth);
 
 	const [active, setActive] = useState(1);
@@ -41,4 +41,4 @@ const page: FC<Props> = () => {
 	);
 };
 
-export default page;
+export default Page;

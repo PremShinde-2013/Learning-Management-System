@@ -17,7 +17,7 @@ const Courses = ({}: CoursesProps) => {
 	return (
 		<div>
 			<div
-				className={`w-[90%] 800px:w-[80%] m-auto flex justify-center flex-col`}
+				className={`w-[90%] 800px:w-[80%] m-auto  mt-44 flex justify-center flex-col`}
 			>
 				<h1 className={title({ class: "text-center " })}>
 					Expand Your Career{" "}

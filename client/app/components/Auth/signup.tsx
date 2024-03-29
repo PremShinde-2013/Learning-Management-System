@@ -22,6 +22,7 @@ import Authentication from "./authentication";
 import VerificationModal from "./verification";
 import { useRegisterMutation } from "@/redux/features/auth/authApi";
 import Snackbar from "@mui/material/Snackbar";
+import toast from "react-hot-toast";
 
 // Define validation schema using Yup
 const SignupSchema = Yup.object().shape({
@@ -49,17 +50,20 @@ const SignupModal: React.FC<Props> = ({
 	useEffect(() => {
 		if (isSuccess) {
 			const message = data?.message || "Resistration successful";
+
 			setShowVerificationModal(true);
 
 			console.log(message);
-			setSnackbarMessage(message);
+			// setSnackbarMessage(message);
+			toast.success(message);
 			setSnackbarOpen(true);
 		}
 		if (error) {
 			if ("data" in error) {
 				const errorData = error as any;
 				console.log(errorData.data.message);
-				setSnackbarError(errorData.data.message);
+				// setSnackbarError(errorData.data.message);
+				toast.error(errorData.data.message);
 				setSnackbarOpen(true);
 			}
 		}
@@ -209,12 +213,6 @@ const SignupModal: React.FC<Props> = ({
 					toggleSignInModal={toggleSignInModal}
 				/>
 			)}
-			<Snackbar
-				open={snackbarOpen}
-				autoHideDuration={6000}
-				onClose={handleSnackbarClose}
-				message={snackbarError || snackbarMessage}
-			/>
 		</>
 	);
 };

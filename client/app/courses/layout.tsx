@@ -1,3 +1,5 @@
+import Footer from "../components/Route/Footer";
+
 export default function DocsLayout({
 	children,
 }: {

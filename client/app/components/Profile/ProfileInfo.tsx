@@ -37,6 +37,7 @@ import {
 } from "@/redux/features/user/userApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { Snackbar, Alert } from "@mui/material";
+import toast from "react-hot-toast";
 type Props = {
 	user: any;
 	active: number;
@@ -79,16 +80,19 @@ const ProfileInfo: FC<Props> = ({
 	useEffect(() => {
 		if (isSuccess || success) {
 			setLoadUser(true);
-			setSuccessMessage("Profile updated successfully");
+			// setSuccessMessage("Profile updated successfully");
+			toast.success("Profile updated successfully");
 		}
 		if (error || updateError) {
-			setErrorMessage("Error updating profile");
+			// setErrorMessage("Error updating profile");
+			toast.error("Error updating profile");
 
 			console.log(error);
 		}
 		if (success) {
 			console.log("Profile updated successfully");
-			setSuccessMessage("Profile updated successfully");
+			// setSuccessMessage("Profile updated successfully");
+			toast.success("Profile updated successfully");
 		}
 	}, [isSuccess, error, success, updateError]);
 
@@ -205,24 +209,6 @@ const ProfileInfo: FC<Props> = ({
 					</Link>
 				</CardFooter>
 			</Card>
-			<Snackbar
-				open={successMessage !== "" || errorMessage !== ""}
-				autoHideDuration={6000}
-				onClose={() => {
-					setSuccessMessage("");
-					setErrorMessage("");
-				}}
-			>
-				<Alert
-					onClose={() => {
-						setSuccessMessage("");
-						setErrorMessage("");
-					}}
-					severity={successMessage !== "" ? "success" : "error"}
-				>
-					{successMessage !== "" ? successMessage : errorMessage}
-				</Alert>
-			</Snackbar>
 		</div>
 	);
 };

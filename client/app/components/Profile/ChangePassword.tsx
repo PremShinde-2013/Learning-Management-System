@@ -35,6 +35,7 @@ import { Typography } from "@mui/material";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { Snackbar, Alert } from "@mui/material";
 import { useUpdatePasswordMutation } from "@/redux/features/user/userApi";
+import toast from "react-hot-toast";
 type Props = {
 	user: any;
 	active: number;
@@ -63,13 +64,15 @@ const ChangePassword: FC<Props> = ({ user, active, setActive, avatar }) => {
 	useEffect(() => {
 		if (isSuccess) {
 			// console.log("password change successfully");
-			setSuccessMessage("Password changed successfully");
+			// setSuccessMessage("Password changed successfully");
+			toast.success("Password changed successfully");
 		}
 		if (error) {
 			if ("data" in error) {
 				const errorData = error as any;
 				// console.log(errorData.data.message);
-				setErrorMessage(errorData.data.message);
+				// setErrorMessage(errorData.data.message);
+				toast.error(errorData.data.message);
 			}
 		}
 	}, [isSuccess, error]);
@@ -137,24 +140,6 @@ const ChangePassword: FC<Props> = ({ user, active, setActive, avatar }) => {
 					</Link>
 				</CardFooter>
 			</Card>
-			<Snackbar
-				open={successMessage !== "" || errorMessage !== ""}
-				autoHideDuration={6000}
-				onClose={() => {
-					setSuccessMessage("");
-					setErrorMessage("");
-				}}
-			>
-				<Alert
-					onClose={() => {
-						setSuccessMessage("");
-						setErrorMessage("");
-					}}
-					severity={successMessage !== "" ? "success" : "error"}
-				>
-					{successMessage !== "" ? successMessage : errorMessage}
-				</Alert>
-			</Snackbar>
 		</div>
 	);
 };
