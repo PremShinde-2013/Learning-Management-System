@@ -1,4 +1,3 @@
-```markdown
 # 🚀 Welcome to LearnifyPro LMS 📚
 
 Dive into LearnifyPro, your go-to Learning Management System (LMS) web application for empowering educational experiences.
@@ -19,7 +18,7 @@ Discover LearnifyPro, a cutting-edge LMS platform designed with innovation in mi
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/PremShinde-2013/Learning-Management-System.git
-   ```
+
 
 2. **Install Dependencies**:
    ```bash
