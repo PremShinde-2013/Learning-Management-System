@@ -159,7 +159,26 @@ const Navbar: FC<Props> = () => {
 				<Loader />
 			) : (
 				<>
-					<NextUINavbar maxWidth='xl' position='sticky'>
+					<NextUINavbar
+						maxWidth='xl'
+						position='sticky'
+						classNames={{
+							item: [
+								"flex",
+								"relative",
+								"h-full",
+								"items-center",
+								"data-[active=true]:after:content-['']",
+								"data-[active=true]:after:absolute",
+								"data-[active=true]:after:bottom-0",
+								"data-[active=true]:after:left-0",
+								"data-[active=true]:after:right-0",
+								"data-[active=true]:after:h-[2px]",
+								"data-[active=true]:after:rounded-[2px]",
+								"data-[active=true]:after:bg-primary",
+							],
+						}}
+					>
 						<NavbarBrand as='li' className='gap-3 max-w-fit'>
 							<NextLink
 								className='flex justify-start items-center gap-1'
@@ -219,18 +238,7 @@ const Navbar: FC<Props> = () => {
 							<ThemeSwitch toggleTheme={toggleTheme} />
 
 							<NavbarItem className='hidden lg:flex'>{searchInput}</NavbarItem>
-							{/* <NavbarItem className='hidden md:flex'>
-								<Button
-									isExternal
-									as={Link}
-									className='text-sm font-normal text-default-600 bg-default-100'
-									href={siteConfig.links.sponsor}
-									startContent={<HeartFilledIcon className='text-danger' />}
-									variant='flat'
-								>
-									Sponsor
-								</Button>
-							</NavbarItem> */}
+
 							<NavbarItem className=' md:flex'>
 								{/* Avatar with click event to toggle sign-in modal */}
 								{user ? (

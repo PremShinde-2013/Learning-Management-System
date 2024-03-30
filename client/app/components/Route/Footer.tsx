@@ -120,7 +120,7 @@ const Footer = ({}: FooterProps) => {
 					</div>
 				</div>
 				<br />
-				<p className='text-center text-black dark:text-white'>
+				<p className='text-center text-black dark:text-white md:text-xl text-sm '>
 					Copyright © 2024 LearnifyPro | All Rights Reserved
 				</p>
 			</div>
