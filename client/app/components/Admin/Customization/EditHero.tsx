@@ -129,35 +129,9 @@ const EditHero: FC<Props> = (props: Props) => {
 						/>
 					</div>
 
-					<div className='flex gap-3'>
-						<Link
-							isExternal
-							href={siteConfig.links.docs}
-							className={buttonStyles({
-								color: "primary",
-								radius: "full",
-								variant: "shadow",
-							})}
-						>
-							Documentation
-						</Link>
-						<Link
-							isExternal
-							className={buttonStyles({ variant: "bordered", radius: "full" })}
-							href={siteConfig.links.github}
-						>
-							<GithubIcon size={20} />
-							GitHub
-						</Link>
-					</div>
 
-					<div className='mt-8'>
-						<Snippet hideSymbol hideCopyButton variant='flat'>
-							<span>
-								Get started by editing <Code color='primary'>app/page.tsx</Code>
-							</span>
-						</Snippet>
-					</div>
+
+
 				</section>
 			</div>
 			<div className='flex justify-end'>
@@ -166,19 +140,18 @@ const EditHero: FC<Props> = (props: Props) => {
 					color='danger'
 					className={`
 			
-          ${
-						data?.layout?.banner?.title !== title ||
-						data?.layout?.banner?.subtitle !== subtitle ||
-						data?.layout?.banner?.image?.url !== image
+          ${data?.layout?.banner?.title !== title ||
+							data?.layout?.banner?.subtitle !== subtitle ||
+							data?.layout?.banner?.image?.url !== image
 							? "!cursor-pointer "
 							: "!cursor-not-allowed"
-					}
+						}
 					
        `}
 					onClick={
 						data?.layout?.banner?.title !== title ||
-						data?.layout?.banner?.subtitle !== subtitle ||
-						data?.layout?.banner?.image?.url !== image
+							data?.layout?.banner?.subtitle !== subtitle ||
+							data?.layout?.banner?.image?.url !== image
 							? handleEdit
 							: () => null
 					}

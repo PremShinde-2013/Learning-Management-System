@@ -4,6 +4,9 @@ import React from "react";
 import ReviewCard from "../Review/ReviewCard";
 import { subtitle, title } from "@/components/primitives";
 
+import { AnimatedTestimonials } from "../ui/animated-testimonials";
+
+
 type ReviewsProps = {};
 
 export const reviews = [
@@ -51,51 +54,74 @@ export const reviews = [
 	},
 ];
 
-const Reviews = ({}: ReviewsProps) => {
+export const testimonials = [
+	{
+		quote:
+			"I had the pleasure of exploring E-Learning, a website that provides an extensive range of courses on various tech-related topics. I was thoroughly impressed with my experience, as the website offers a comprehensive selection of courses that cater to different skill levels and interests. If you're looking to enhance your knowledge and skills in the tech industry, I highly recommend checking out E-Learning!",
+		name: "Aditya Patil",
+		designation: "Student at Pune University",
+		src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+	},
+	{
+		quote:
+			"Thanks for your amazing programming tutorial channel! Your teaching style is outstanding, and the quality of your tutorials is top-notch. Your ability to break down complex topics into manageable parts, and cover diverse programming languages and topics is truly impressive. The practical applications and real-world examples you incorporate reinforce the theoretical knowledge and provide valuable insights. Your engagement with the audience fosters a supportive learning environment. Thank you for your dedication, expertise, and passion for teaching programming, and keep up the fantastic work!",
+		name: "Durga Deshmukh",
+		designation: "Full Stack Developer at Mumbai",
+		src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+	},
+	{
+		quote:
+			"Thanks for your amazing programming tutorial channel! Your teaching style is outstanding, and the quality of your tutorials is top-notch. Your ability to break down complex topics into manageable parts, and cover diverse programming languages and topics is truly impressive. The practical applications and real-world examples you incorporate reinforce the theoretical knowledge and provide valuable insights. Your engagement with the audience fosters a supportive learning environment. Thank you for your dedication, expertise, and passion for teaching programming, and keep up the fantastic work!",
+		name: "Amit Joshi",
+		designation: "Computer Systems Engineering Student at Nagpur",
+		src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+	},
+	{
+		quote:
+			"I had the pleasure of exploring E-Learning, a website that provides an extensive range of courses on various tech-related topics. I was thoroughly impressed with my experience.",
+		name: "Nitin Pawar",
+		designation: "Junior Web Developer at Nashik",
+		src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+	},
+	{
+		quote:
+			"Your content is very special. The thing I liked the most is that the videos are so long, which means they cover everything in detail. Anyone with beginner-level knowledge can complete an integrated project after watching the videos. Thank you very much. I'm very excited for the next videos. Keep doing this amazing work!",
+		name: "Sachin Patil",
+		designation: "Full Stack Web Developer at Pune",
+		src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+	},
+	{
+		quote:
+			"Join E-Learning! E-Learning focuses on practical applications rather than just teaching the theory behind programming languages or frameworks. I took a lesson on creating a web marketplace using React JS, and it was very helpful in teaching me the different stages involved in creating a project from start to finish. Overall, I highly recommend E-Learning to anyone looking to improve their programming skills and build practical projects. E-Learning is a great resource that will help you take your skills to the next level.",
+		name: "Vikram Sharma",
+		designation: "Full Stack Web Developer at Mumbai",
+		src: "https://images.unsplash.com/photo-1603707281027-aeaec3d0ecbc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+	},
+];
+
+
+
+const Reviews = ({ }: ReviewsProps) => {
 	return (
-		<div className='w-[90%] 800px:w-[85%] m-auto'>
-			<div
-				className='w-full lg:flex  sm:flex
-                lg:flex-row
+		<>
+			<div className="flex flex-col">
 
-            items-center'
-			>
-				<div className='800px:w-[50%] w-full'>
-					<Image
-						src='https://res.cloudinary.com/kouroshrstn/image/upload/v1707293134/Avatars/business-img_o2xmaa.png'
-						alt='business'
-						width={700}
-						height={700}
-					/>
-				</div>
-
-				<div className='800px:w-[50%] w-full'>
+				<div className='800px:w-[50%] w-full pt-20'>
 					<h3 className={title()}>
 						Our Students Are{" "}
 						<span className={title({ color: "violet" })}>Our Strength</span>{" "}
 						<br /> See What They Say About Us
 					</h3>
 					<br />
-					<p className={subtitle()}>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque unde
-						voluptatum dignissimos, nulla perferendis dolorem voluptate nemo
-						possimus magni deleniti natus accusamus officiis quasi nihil
-						commodi, praesentium quidem, quis doloribus?
-					</p>
-				</div>
-				<br />
-				<br />
-			</div>
 
-			<div
-				className='grid grid-cols-1 gap-[25px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-2 lg:gap-[25px] xl:grid-cols-2 xl:gap-[35px] mb-12 border-0 md:[&>*:nth-child(3)]:!mt-[-60px] md:[&>*:nth-child(6)]:!mt-[-20px]
-			mt-16'
-			>
-				{reviews?.map((i, index) => (
-					<ReviewCard item={i} key={index} />
-				))}
+				</div>
+				<AnimatedTestimonials testimonials={testimonials} autoplay />
 			</div>
-		</div>
+		</>
+
+		// </div>
+
+
 	);
 };
 

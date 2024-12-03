@@ -76,7 +76,7 @@ const CheckOutForm = ({ data, user, refetch }: CheckOutFormProps) => {
 			<LinkAuthenticationElement id='link-authentication-element' />
 
 			<PaymentElement id='payment-element' />
-			<button disabled={isLoading || !stripe || !elements} id='submit'>
+			<button disabled={isLoading || !stripe || !elements} id='submit' className="bg-purple-500 rounded-2xl px-5 py-1 flex  justify-items-center justify-center mt-10">
 				<span id='button-text' className={` mt-2 !h-[35px]`}>
 					{isLoading ? "Paying..." : "Pay now"}
 				</span>

@@ -12,7 +12,7 @@ import { button as buttonStyles } from "@nextui-org/theme";
 
 type HeroProps = {};
 
-const Hero = ({}: HeroProps) => {
+const Hero = ({ }: HeroProps) => {
 	const [search, setSearch] = useState("");
 
 	const router = useRouter();
@@ -32,7 +32,7 @@ const Hero = ({}: HeroProps) => {
 				<Loader />
 			) : (
 				<div
-					className='container mx-auto  
+					className='container mx-auto   mt-0
 			flex lg:flex-row flex-col justify-evenly'
 				>
 					<section className='flex flex-col items-center justify-center gap-4 py-8 md:py-10 '>

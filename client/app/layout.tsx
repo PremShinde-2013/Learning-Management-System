@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
+import "../styles/globals.css";
 
-import Navbar from "./components/navbar";
 import { Link } from "@nextui-org/link";
 import socketIO from "socket.io-client";
 
@@ -15,6 +15,7 @@ import { SessionProvider } from "next-auth/react";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Loader from "./components/Loader/Loader";
 import { useEffect } from "react";
+import Nav from "./components/Nav";
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 // export const metadata: Metadata = {
@@ -50,8 +51,10 @@ export default function RootLayout({
 			>
 				<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
 					<SessionProvider>
+
 						<div className='relative flex flex-col h-screen'>
-							<Navbar />
+
+							<Nav />
 							<main className='container mx-auto max-w-7xl pt-16 px-6 flex-grow'>
 								<Custom>{children}</Custom>
 							</main>
@@ -83,7 +86,7 @@ const Custom = ({ children }: CustomProps) => {
 	const { isLoading } = useLoadUserQuery({});
 
 	useEffect(() => {
-		socketId.on("connection", () => {});
+		socketId.on("connection", () => { });
 	}, []);
 
 	return <div>{isLoading ? <Loader /> : <div>{children}</div>}</div>;

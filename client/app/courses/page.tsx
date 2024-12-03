@@ -73,10 +73,9 @@ const CoursesContent = () => {
 							<Chip
 								variant='faded'
 								// color='danger'
-								radius='md'
-								className={` h-10 w-auto ${
-									category === "All" ? "bg-purple-600" : "bg-purple-500"
-								}  cursor-pointer`}
+								radius='sm'
+								className={` h-10 w-auto ${category === "All" ? "bg-gradient-to-br from-purple-500 to-pink-500 border-small border-white/50 shadow-violet-500/30 text-white text-md px-3" : "bg-gradient-to-br from-purple-400 to-pink-200 border-small border-white/50 shadow-violet-500/30 text-black text-md px-3"
+									}  cursor-pointer`}
 								onClick={() => setCategory("All")}
 							>
 								All
@@ -87,12 +86,10 @@ const CoursesContent = () => {
 									<Chip
 										variant='faded'
 										// color='danger'
-										radius='md'
-										className={` h-10 w-auto ${
-											category === item.title
-												? "bg-purple-600"
-												: "bg-purple-500"
-										}  cursor-pointer`}
+										radius='sm'
+										className={` h-10 w-auto ${category === item.title
+											? "bg-gradient-to-br from-purple-500 to-pink-500 border-small border-white/50 shadow-violet-500/30 text-white text-md px-3" : "bg-gradient-to-br from-purple-400 to-pink-200   border-small border-white/50 shadow-violet-500/30 text-black text-md px-3"
+											}  cursor-pointer`}
 										onClick={() => setCategory(item.title)}
 									>
 										{item.title}
@@ -124,7 +121,7 @@ const CoursesContent = () => {
 	);
 };
 
-const Page = ({}: PageProps) => {
+const Page = ({ }: PageProps) => {
 	const [route, setRoute] = useState("Login");
 	const [open, setOpen] = useState(false);
 
