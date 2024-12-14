@@ -23,12 +23,12 @@ Discover LearnifyPro, a cutting-edge LMS platform designed with innovation in mi
 2. **Install Dependencies**:
    ```bash
    cd Learning-Management-System
-   npm install
+   pnpm install
    ```
 
 3. **Run Development Server**:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 4. **Access LearnifyPro** at [http://localhost:3000](http://localhost:3000).
